@@ -1,0 +1,47 @@
+{
+  "name": "afisha-today",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/**/*"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rimraf lib && npx tsc",
+    "start": "node ./lib/index.js",
+    "dev": "nodemon",
+    "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "fix": "eslint \"src/**/*.{ts,tsx}\" --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MichailZyusko/afisha-today.git"
+  },
+  "author": "Michail Zyusko",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MichailZyusko/afisha-today/issues"
+  },
+  "homepage": "https://github.com/MichailZyusko/afisha-today#readme",
+  "devDependencies": {
+    "@types/node": "^20.11.28",
+    "@types/qrcode": "^1.5.5",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb-typescript": "^18.0.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.1.1",
+    "nodemon": "^3.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.2"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "qrcode": "^1.5.3",
+    "telegraf": "^4.16.3"
+  }
+}
