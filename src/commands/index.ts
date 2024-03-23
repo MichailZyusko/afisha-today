@@ -4,10 +4,11 @@ import { pathToAssets } from '../config';
 import { QRC } from '../services/qrcode';
 import { delay } from '../utils';
 import { Scenes } from '../constants/enums';
-import { POLL_QUESTIONS } from '../constants';
+import { DISAGREE_ON_PERSONAL_DATA_PROCESSING_MSG, START_SCENE_REPLICAS } from '../constants';
+import { AGREEMENT_ON_PERSONAL_DATA_PROCESSING_KEYBOARD_MARKUP } from '../constants/keyboard_markup';
 
 export class Commands {
-  static async getMyQRCode(): Promise<void> {
+  static async getMyQRCode() {
     bot.command('me', async (ctx) => {
       const userId = ctx.from.id.toString();
 
@@ -23,54 +24,37 @@ export class Commands {
     });
   }
 
-  static async start(): Promise<void> {
+  static async start() {
     bot.start(async (ctx) => {
-      await ctx.reply('Приветствие + описание проекта');
-      await delay();
-      await ctx.reply('Краткое пособие по участию в лампе (в каком случае и как ты получаешь приз)');
-      await delay();
-      await ctx.reply('Согласие на обработку персональных данных', {
+      await ctx.reply(START_SCENE_REPLICAS[0]);
+      await delay(0);
+      await ctx.reply(START_SCENE_REPLICAS[1]);
+      await delay(0);
+      await ctx.reply(START_SCENE_REPLICAS[2], {
         reply_markup: {
-          inline_keyboard: [
-            [
-              { text: '✅ Согласен', callback_data: 'agree' },
-              { text: '❌ Не согласен', callback_data: 'disagree' },
-            ],
-          ],
+          inline_keyboard: AGREEMENT_ON_PERSONAL_DATA_PROCESSING_KEYBOARD_MARKUP,
         },
       });
     });
   }
 
-  static async handlePollVote(): Promise<void> {
-    bot.on('poll', async (ctx) => {
-      console.log('🚀 ~ ctx:', ctx);
-
-      if (ctx.poll.question === POLL_QUESTIONS.EVENTS_POOL) {
-        // TODO: Persist entertainment in DB
-        console.log('STEP: 5');
-        console.log('`Entertainment:`', ctx.poll);
-      }
-    });
-  }
-
-  static async agreeOnPersonalDataProcessing(): Promise<void> {
+  static async agreeOnPersonalDataProcessing() {
     bot.action('agree', async (ctx) => {
-      ctx.editMessageText('Заебок');
+      ctx.answerCbQuery();
       // TODO: Persist user in DB
 
       await ctx.scene.enter(Scenes.INTRODUCTION_SCENE);
     });
   }
 
-  static async disagreeOnPersonalDataProcessing(): Promise<void> {
+  static async disagreeOnPersonalDataProcessing() {
     bot.action('disagree', async (ctx) => {
-      ctx.editMessageText('не заебок');
-      await ctx.reply('Было приятно с тобой пообзаться, брат. Если передумаешь, напиши /start');
+      await ctx.answerCbQuery();
+      await ctx.reply(DISAGREE_ON_PERSONAL_DATA_PROCESSING_MSG);
     });
   }
 
-  static async launch(): Promise<void> {
+  static async launch() {
     await bot.launch();
   }
 }

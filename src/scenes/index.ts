@@ -1,31 +1,43 @@
 /* eslint-disable no-console */
 
 import { WizardScene } from 'telegraf/scenes';
-import {
-  Age, Busyness, Entertainment, Scenes,
-} from '../constants/enums';
+import chunk from 'lodash.chunk';
+import { Entertainment, Scenes } from '../constants/enums';
 import { delay } from '../utils';
-import { POLL_QUESTIONS } from '../constants';
+import { INTRODUCTION_SCENE_REPLICAS } from '../constants';
+import { AGE_KEYBOARD_MARKUP, BUSYNESS_KEYBOARD_MARKUP, SEX_KEYBOARD_MARKUP } from '../constants/keyboard_markup';
+
+let entertainmentOptions = [
+  [
+    { text: Entertainment.ACTIVE, callback_data: Entertainment.ACTIVE },
+    { text: Entertainment.PARTY, callback_data: Entertainment.PARTY },
+  ],
+  [
+    { text: Entertainment.CHILL_RELAX, callback_data: Entertainment.CHILL_RELAX },
+    { text: Entertainment.BRAINSTORM, callback_data: Entertainment.BRAINSTORM },
+  ],
+  [
+    { text: Entertainment.ART, callback_data: Entertainment.ART },
+    { text: Entertainment.FOOD, callback_data: Entertainment.FOOD },
+  ],
+];
 
 export const registrationScene = new WizardScene<any>(
   Scenes.INTRODUCTION_SCENE,
   async (ctx) => {
     console.log('STEP: 1');
-    const fullName = `${ctx.from.first_name} ${ctx.from.last_name}`;
+    const fullName = `${ctx.from.first_name} ${ctx.from.last_name ?? ''}`;
     await ctx.reply(`
       Привет ${fullName}!\nТеперь заполни анкету, чтобы мы могли подобрать задания лично под тебя
     `);
-    await delay();
-    await ctx.reply('Твой пол', {
+
+    await delay(0);
+    await ctx.reply(INTRODUCTION_SCENE_REPLICAS[0], {
       reply_markup: {
-        inline_keyboard: [
-          [
-            { text: '👱‍♂️', callback_data: 'male' },
-            { text: '👩‍🦰', callback_data: 'female' },
-          ],
-        ],
+        inline_keyboard: SEX_KEYBOARD_MARKUP,
       },
     });
+
     return ctx.wizard.next();
   },
   async (ctx) => {
@@ -34,26 +46,9 @@ export const registrationScene = new WizardScene<any>(
     console.log('`Sex:`', ctx.update.callback_query.data);
 
     await ctx.answerCbQuery();
-    await ctx.reply('Твой возраст', {
+    await ctx.reply(INTRODUCTION_SCENE_REPLICAS[1], {
       reply_markup: {
-        inline_keyboard: [
-
-          [
-            { text: '👶 до 15', callback_data: Age.CHILD },
-            { text: '🧒 16-18', callback_data: Age.TEENAGER },
-          ],
-          [
-            { text: '👦 19-22', callback_data: Age.YOUNG_ADULT },
-            { text: '🧑 23-28', callback_data: Age.ADULT },
-          ],
-          [
-            { text: '👨 29-35', callback_data: Age.MIDDLE_ADULT },
-            { text: '👨‍🦰 36-42', callback_data: Age.OLD_ADULT },
-          ],
-          [
-            { text: '👨‍🦳 больше 43', callback_data: Age.SENIOR },
-          ],
-        ],
+        inline_keyboard: AGE_KEYBOARD_MARKUP,
       },
     });
 
@@ -65,17 +60,9 @@ export const registrationScene = new WizardScene<any>(
     console.log('`Age:`', ctx.update.callback_query.data);
 
     await ctx.answerCbQuery();
-    await ctx.reply('Кол-во свободного времени в день', {
+    await ctx.reply(INTRODUCTION_SCENE_REPLICAS[2], {
       reply_markup: {
-        inline_keyboard: [
-          [
-            { text: 'меньше 2 ч.', callback_data: Busyness.LOW },
-            { text: '2-4 ч.', callback_data: Busyness.MEDIUM },
-          ],
-          [
-            { text: 'больше 4 ч.', callback_data: Busyness.HIGH },
-          ],
-        ],
+        inline_keyboard: BUSYNESS_KEYBOARD_MARKUP,
       },
     });
 
@@ -87,15 +74,57 @@ export const registrationScene = new WizardScene<any>(
     console.log('`Busyness:`', ctx.update.callback_query.data);
 
     await ctx.answerCbQuery();
-    await ctx.replyWithPoll(
-      POLL_QUESTIONS.EVENTS_POOL,
-      [
-        Entertainment.ACTIVE, Entertainment.CHILL_RELAX,
-        Entertainment.PARTY, Entertainment.BRAINSTORM,
-        Entertainment.ART, Entertainment.FOOD,
-      ],
-      { allows_multiple_answers: true },
-    );
+    await ctx.reply(INTRODUCTION_SCENE_REPLICAS[3], {
+      reply_markup: {
+        inline_keyboard: entertainmentOptions,
+      },
+    });
+
+    return ctx.wizard.next();
+  },
+  async (ctx) => {
+    // TODO: Persist Busyness in DB
+    console.log('STEP: 5');
+    console.log('`Entertainment_1:`', ctx.update.callback_query.data);
+
+    await ctx.answerCbQuery();
+    entertainmentOptions = chunk(entertainmentOptions
+      .flat()
+      .filter((i) => i.text !== ctx.update.callback_query.data), 2);
+
+    await ctx.reply(INTRODUCTION_SCENE_REPLICAS[3], {
+      reply_markup: {
+        inline_keyboard: entertainmentOptions,
+      },
+    });
+
+    return ctx.wizard.next();
+  },
+  async (ctx) => {
+    // TODO: Persist Busyness in DB
+    console.log('STEP: 6');
+    console.log('`Entertainment_2:`', ctx.update.callback_query.data);
+
+    await ctx.answerCbQuery();
+    entertainmentOptions = chunk(entertainmentOptions
+      .flat()
+      .filter((i) => i.text !== ctx.update.callback_query.data), 2);
+
+    await ctx.reply(INTRODUCTION_SCENE_REPLICAS[3], {
+      reply_markup: {
+        inline_keyboard: entertainmentOptions,
+      },
+    });
+
+    return ctx.wizard.next();
+  },
+  async (ctx) => {
+    // TODO: Persist Busyness in DB
+    console.log('STEP: 7');
+    console.log('`Entertainment_3:`', ctx.update.callback_query.data);
+
+    await ctx.answerCbQuery();
+    await ctx.reply(INTRODUCTION_SCENE_REPLICAS[4]);
 
     return ctx.scene.leave();
   },

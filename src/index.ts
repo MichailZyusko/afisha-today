@@ -5,7 +5,6 @@ import { Commands } from './commands';
     Commands.start(),
     Commands.agreeOnPersonalDataProcessing(),
     Commands.disagreeOnPersonalDataProcessing(),
-    Commands.handlePollVote(),
     Commands.getMyQRCode(),
   ]);
 
