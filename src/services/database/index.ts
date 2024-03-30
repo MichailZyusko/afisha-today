@@ -22,12 +22,20 @@ class Database {
 
   async init(): Promise<void> {
     this.client = new DataSource({
+
       type: 'postgres',
-      host: process.env.DB_HOST,
-      port: +process.env.DB_PORT,
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
+      ...(process.env.NODE_ENV === 'prod'
+        ? {
+          url: process.env.DB_URL,
+        }
+        : {
+          host: process.env.DB_HOST,
+          port: +process.env.DB_PORT,
+          username: process.env.DB_USERNAME,
+          password: process.env.DB_PASSWORD,
+          database: process.env.DB_NAME,
+        }
+      ),
       entities: [User, Event, Entertainment, UserEvent, Partner],
       synchronize: true,
       cache: true,
