@@ -1,20 +1,25 @@
 import 'dotenv/config';
 import { Scenes, Telegraf, session } from 'telegraf';
 import { timeLogMiddleware } from '../middleware';
-import { registrationScene } from '../scenes';
+import { ContextWithCustomSession, registrationScene } from '../scenes';
 
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
-      'TELEGRAMM_API_TOKEN': string
-      'TELEGRAMM_BOT_USERNAME': string
+      'TELEGRAMM_API_TOKEN': string;
+      'TELEGRAMM_BOT_USERNAME': string;
+      'DB_HOST': string;
+      'DB_PORT': number;
+      'DB_USERNAME': string;
+      'DB_PASSWORD': string;
+      'DB_NAME': string;
     }
   }
 }
 
-const stage = new Scenes.Stage<Scenes.SceneContext>([registrationScene]);
+const stage = new Scenes.Stage<ContextWithCustomSession>([registrationScene]);
 
-export const bot = new Telegraf<Scenes.SceneContext>(process.env.TELEGRAMM_API_TOKEN);
+export const bot = new Telegraf<ContextWithCustomSession>(process.env.TELEGRAMM_API_TOKEN);
 
 bot.use(timeLogMiddleware);
 bot.use(session());

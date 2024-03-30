@@ -6,6 +6,8 @@ import { delay } from '../utils';
 import { Scenes } from '../constants/enums';
 import { DISAGREE_ON_PERSONAL_DATA_PROCESSING_MSG, START_SCENE_REPLICAS } from '../constants';
 import { AGREEMENT_ON_PERSONAL_DATA_PROCESSING_KEYBOARD_MARKUP } from '../constants/keyboard_markup';
+import { UserDTO } from '../dto/user.dto';
+import database from '../services/database';
 
 export class Commands {
   static async getMyQRCode() {
@@ -40,8 +42,11 @@ export class Commands {
 
   static async agreeOnPersonalDataProcessing() {
     bot.action('agree', async (ctx) => {
+      // !TODO: add errors handling
       ctx.answerCbQuery();
-      // TODO: Persist user in DB
+
+      const user = new UserDTO(ctx);
+      await database.usersRepository.upsert(user, ['id']);
 
       await ctx.scene.enter(Scenes.INTRODUCTION_SCENE);
     });

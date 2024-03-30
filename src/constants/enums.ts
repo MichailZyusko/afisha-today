@@ -27,3 +27,10 @@ export enum Entertainment {
   FOOD = 'Посещение кафе, ресторанов, баров',
   ART = 'Творческий отдых',
 }
+
+export enum EventState {
+  COMPLETED = 'COMPLETED',
+  IN_PROGRESS = 'IN_PROGRESS',
+  NOT_STARTED = 'NOT_STARTED',
+  DECLINED = 'DECLINED',
+}
