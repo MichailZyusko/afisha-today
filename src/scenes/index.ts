@@ -60,7 +60,7 @@ export const registrationScene = new WizardScene<any>(
     console.log('STEP: 2');
     console.log('`Sex:`', ctx.update.callback_query.data);
     ctx.scene.session.user = {
-      sex: ctx.update.callback_query.data,
+      sex: ctx.update.callback_query.data === 'male',
     };
 
     await ctx.answerCbQuery();
