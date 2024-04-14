@@ -1,7 +1,11 @@
 import 'dotenv/config';
 import { Scenes, Telegraf, session } from 'telegraf';
 import { timeLogMiddleware } from '../middleware';
-import { ContextWithCustomSession, registrationScene } from '../scenes';
+import {
+  ContextWithCustomSession,
+  entertainmentSuggestionScene,
+  registrationScene,
+} from '../scenes';
 
 declare global {
   namespace NodeJS {
@@ -19,7 +23,10 @@ declare global {
   }
 }
 
-const stage = new Scenes.Stage<ContextWithCustomSession>([registrationScene]);
+const stage = new Scenes.Stage<ContextWithCustomSession>([
+  registrationScene,
+  entertainmentSuggestionScene,
+]);
 
 export const bot = new Telegraf<ContextWithCustomSession>(process.env.TELEGRAMM_API_TOKEN);
 

@@ -15,6 +15,13 @@ export const SEX_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
   ],
 ];
 
+export const EVENT_FEEDBACK_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
+  [
+    { text: '👍', callback_data: 'like' },
+    { text: '👎', callback_data: 'dislike' },
+  ],
+];
+
 export const AGE_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
   [
     { text: '👶 до 15', callback_data: Age.CHILD },

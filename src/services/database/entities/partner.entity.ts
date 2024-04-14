@@ -2,9 +2,11 @@
 
 import {
   Column, CreateDateColumn, Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Event } from './event.entity';
 
 @Entity()
 export class Partner {
@@ -16,6 +18,9 @@ export class Partner {
 
   @Column()
   description: string;
+
+  @OneToMany(() => Event, (event) => event.partner)
+  events: Event[];
 
   @CreateDateColumn()
   created_at: Date;

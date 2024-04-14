@@ -9,6 +9,7 @@ import db from './services/database';
       Commands.agreeOnPersonalDataProcessing(),
       Commands.disagreeOnPersonalDataProcessing(),
       Commands.getMyQRCode(),
+      Commands.suggestNewEvent(),
     ]);
 
     await db.init();
@@ -17,8 +18,7 @@ import db from './services/database';
     console.log('Bot successfully started');
   } catch (e) {
     console.error(e);
-  }
-  finally {
+  } finally {
     await db.close();
     process.exit(0);
   }

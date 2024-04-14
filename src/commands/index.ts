@@ -48,7 +48,7 @@ export class Commands {
       const user = new UserDTO(ctx);
       await database.usersRepository.upsert(user, ['id']);
 
-      await ctx.scene.enter(Scenes.INTRODUCTION_SCENE);
+      await ctx.scene.enter(Scenes.REGISTRATION_SCENE);
     });
   }
 
@@ -56,6 +56,12 @@ export class Commands {
     bot.action('disagree', async (ctx) => {
       await ctx.answerCbQuery();
       await ctx.reply(DISAGREE_ON_PERSONAL_DATA_PROCESSING_MSG);
+    });
+  }
+
+  static async suggestNewEvent() {
+    bot.command('new_event', async (ctx) => {
+      await ctx.scene.enter(Scenes.SUGGESTION_SCENE);
     });
   }
 

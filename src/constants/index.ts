@@ -14,3 +14,9 @@ export const INTRODUCTION_SCENE_REPLICAS = {
   3: 'Вид развлечений (выбери самое интересное и любимое для тебя)',
   4: 'Ты супер! Мы подготовили для тебя 2 задания на эту неделю!',
 };
+
+export const dateFormatterOptions: Intl.DateTimeFormatOptions = {
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric',
+};

@@ -10,7 +10,7 @@ import { Age, Busyness } from '../../../constants/enums';
 @Entity()
 export class User {
   @PrimaryColumn()
-  id: string;
+  id: number;
 
   @Column()
   chat_id: string;

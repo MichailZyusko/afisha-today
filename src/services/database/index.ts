@@ -1,7 +1,7 @@
 import { DataSource, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { Event } from './entities/event.entity';
-import { Entertainment } from './entities/entertaiment.entity';
+import { Entertainment } from './entities/entertainment.entity';
 import { UserEvent } from './entities/user_event.entity';
 import { Partner } from './entities/partner.entity';
 
@@ -16,13 +16,14 @@ class Database {
 
   entertainmentsRepository: Repository<Entertainment>;
 
+  partnersRepository: Repository<Partner>;
+
   constructor() {
     console.log('db initialization');
   }
 
   async init(): Promise<void> {
     this.client = new DataSource({
-
       type: 'postgres',
       ...(process.env.NODE_ENV === 'prod'
         ? {
@@ -47,6 +48,7 @@ class Database {
     this.eventsRepository = this.client.getRepository(Event);
     this.usersEventsRepository = this.client.getRepository(UserEvent);
     this.entertainmentsRepository = this.client.getRepository(Entertainment);
+    this.partnersRepository = this.client.getRepository(Partner);
   }
 
   async close(): Promise<void> {

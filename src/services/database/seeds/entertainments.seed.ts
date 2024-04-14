@@ -14,6 +14,6 @@ export const entertainmentsSeed = async () => {
   await db.entertainmentsRepository.insert(
     ENTERTAINMENTS_SEED.map((entertainment) => ({
       name: entertainment,
-    }))
+    })),
   );
 };
