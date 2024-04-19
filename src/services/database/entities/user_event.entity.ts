@@ -7,7 +7,7 @@ import { User } from './user.entity';
 import { Event } from './event.entity';
 import { EventState } from '../../../constants/enums';
 
-@Entity()
+@Entity('users_events')
 export class UserEvent {
   @PrimaryGeneratedColumn('increment')
   id: number;

@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { Event } from './event.entity';
 
-@Entity()
+@Entity('partners')
 export class Partner {
   @PrimaryGeneratedColumn('increment')
   id: number;

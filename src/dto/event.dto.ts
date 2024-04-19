@@ -12,7 +12,7 @@ export class EventDTO {
       Предлагаю посмотреть на <b>"${event.name}"</b>
       В двух словах это ${event.description}
       💰: ${event.price}
-      📍: <a href="${event.location}">Yandex maps</a>
+      📍: <a href="${event.location_url}">${event.address}</a>
       🕔: ${event.schedule}
       🗓: ${formatDateRange(event.started_at, event.expired_at)}
       🔞: ${event.age}

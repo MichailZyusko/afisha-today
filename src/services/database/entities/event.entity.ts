@@ -10,7 +10,7 @@ import { Partner } from './partner.entity';
 import { Entertainment } from './entertainment.entity';
 import { Age } from '../../../constants/enums';
 
-@Entity()
+@Entity('events')
 export class Event {
   @PrimaryGeneratedColumn('increment')
   id: number;
@@ -32,7 +32,10 @@ export class Event {
   price: string;
 
   @Column()
-  location: string;
+  address: string;
+
+  @Column()
+  location_url: string;
 
   @Column()
   schedule: string;

@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { Age, Busyness } from '../../../constants/enums';
 
-@Entity()
+@Entity('users')
 export class User {
   @PrimaryColumn()
   id: number;

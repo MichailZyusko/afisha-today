@@ -55,6 +55,12 @@ class Database {
     console.log('db close');
     await this.client?.destroy();
   }
+
+  async query<T>(...params: Parameters<DataSource['query']>) {
+    return this.client!.query<T>(...params);
+  }
 }
 
 export default new Database();
+
+

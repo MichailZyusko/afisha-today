@@ -9,8 +9,6 @@ export const deepTrim = (msg: string) => msg
   .map((line) => line.trim())
   .join('\n');
 
-export const formatDateRange = (startDate: Date, endDate: Date) => {
-  return new Intl
-    .DateTimeFormat('ru-RU', dateFormatterOptions)
-    .formatRange(startDate, endDate)
-}
+export const formatDateRange = (startDate: Date, endDate: Date) => new Intl
+  .DateTimeFormat('ru-RU', dateFormatterOptions)
+  .formatRange(startDate, endDate);

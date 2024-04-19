@@ -19,7 +19,7 @@ import db from './services/database';
   } catch (e) {
     console.error(e);
   } finally {
-    await db.close();
+    // await db.close();
     process.exit(0);
   }
 })();
