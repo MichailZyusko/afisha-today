@@ -4,7 +4,7 @@ import { Age } from '../../../constants/enums';
 import { Entertainment } from '../entities/entertainment.entity';
 import { Partner } from '../entities/partner.entity';
 
-const EVENTS_SEED = [
+export const EVENTS_SEED = [
   {
     id: 1,
     name: 'Event 1',
@@ -27,7 +27,7 @@ const EVENTS_SEED = [
     id: 2,
     name: 'Event 2',
     description: 'Event 2 description',
-    media: 'http://http.cat/400',
+    media: 'http://http.cat/401',
     price: '11.00',
     location_url: 'https://yandex.com/maps/-/CDVBuQzk',
     address: 'Address 2',
@@ -44,7 +44,7 @@ const EVENTS_SEED = [
     id: 3,
     name: 'Event 3',
     description: 'Event 3 description',
-    media: 'http://http.cat/400',
+    media: 'http://http.cat/403',
     price: '13.00',
     location_url: 'https://yandex.com/maps/-/CDVBuQzk',
     address: 'Address 3',
@@ -61,7 +61,7 @@ const EVENTS_SEED = [
     id: 4,
     name: 'Event 4',
     description: 'Event 4 description',
-    media: 'http://http.cat/400',
+    media: 'http://http.cat/404',
     price: '14.00',
     location_url: 'https://yandex.com/maps/-/CDVBuQzk',
     address: 'Address 4',
@@ -78,7 +78,7 @@ const EVENTS_SEED = [
     id: 1,
     name: 'Event 5',
     description: 'Event 5 description',
-    media: 'http://http.cat/400',
+    media: 'http://http.cat/500',
     price: '50.00',
     location_url: 'https://yandex.com/maps/-/CDVBuQzk',
     address: 'Address 5',

@@ -1,2 +1,2 @@
-export * from './registration.scene';
-export * from './entertainment.scene';
+export * from './registration';
+export * from './entertainment';

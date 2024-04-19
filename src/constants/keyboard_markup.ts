@@ -22,6 +22,34 @@ export const EVENT_FEEDBACK_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
   ],
 ];
 
+export const EVENT_AGREEMENT_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
+  [
+    { text: '✅ Принять', callback_data: 'approve' },
+    { text: '⬅️ Назад', callback_data: 'back' },
+  ],
+];
+
+export const EVENT_FINISH_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
+  [
+    { text: '✅ Выполнено', callback_data: 'done' },
+    { text: '❌ Отказ', callback_data: 'reject' },
+  ],
+];
+
+export const EVENT_ID_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
+  [
+    { text: '1️⃣', callback_data: '0' },
+    { text: '2️⃣', callback_data: '1' }
+  ],
+  [
+    { text: '3️⃣', callback_data: '2' },
+    { text: '4️⃣', callback_data: '3' },
+  ],
+  [
+    { text: '5️⃣', callback_data: '4' },
+  ],
+];
+
 export const AGE_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
   [
     { text: '👶 до 15', callback_data: Age.CHILD },
