@@ -72,24 +72,24 @@ export const registrationScene = new WizardScene<any>(
 
     return ctx.wizard.next();
   },
-  async (ctx) => {
-    console.log(`${Scenes.REGISTRATION_SCENE}~STEP: 3`);
-    console.log('`Age:`', ctx.update.callback_query.data);
-    ctx.scene.session.user.age = ctx.update.callback_query.data;
+  // async (ctx) => {
+  //   console.log(`${Scenes.REGISTRATION_SCENE}~STEP: 3`);
+  //   console.log('`Age:`', ctx.update.callback_query.data);
+  //   ctx.scene.session.user.age = ctx.update.callback_query.data;
 
-    await ctx.answerCbQuery();
-    await ctx.reply(INTRODUCTION_SCENE_REPLICAS[2], {
-      reply_markup: {
-        inline_keyboard: BUSYNESS_KEYBOARD_MARKUP,
-      },
-    });
+  //   await ctx.answerCbQuery();
+  //   await ctx.reply(INTRODUCTION_SCENE_REPLICAS[2], {
+  //     reply_markup: {
+  //       inline_keyboard: BUSYNESS_KEYBOARD_MARKUP,
+  //     },
+  //   });
 
-    return ctx.wizard.next();
-  },
+  //   return ctx.wizard.next();
+  // },
   async (ctx) => {
     console.log(`${Scenes.REGISTRATION_SCENE}~STEP: 4`);
-    console.log('`Busyness:`', ctx.update.callback_query.data);
-    ctx.scene.session.user.busyness = ctx.update.callback_query.data;
+    // console.log('`Busyness:`', ctx.update.callback_query.data);
+    // ctx.scene.session.user.busyness = ctx.update.callback_query.data;
 
     const entertainmentKeyboardMarkup = await database.entertainmentsRepository.find();
     ctx.scene.session.entertainmentKeyboardMarkup = chunk(
