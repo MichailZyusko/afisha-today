@@ -1,5 +1,5 @@
 import QRCode from 'qrcode';
-import { pathToAssets } from '../../config';
+import { PATH_TO_ASSETS } from '../../config';
 
 type TEncodeProps = {
   payload: unknown;
@@ -9,12 +9,16 @@ type TEncodeProps = {
 export class QRC {
   static async encode({ payload, userId }: TEncodeProps) {
     try {
+      const path = `${PATH_TO_ASSETS}/qrcode/${userId}.png`;
+
       await QRCode.toFile(
-        `${pathToAssets}/qrcode/${userId}.png`,
+        path,
         JSON.stringify(payload),
       );
+
+      return { path };
     } catch (e) {
-      console.error(`Error during data encoding: ${e}`);
+      throw new Error(`Error during data encoding: ${e}`);
     }
   }
 }

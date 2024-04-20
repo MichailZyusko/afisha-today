@@ -18,8 +18,6 @@ export class UserDTO {
 
   full_name: string;
 
-  phone: string;
-
   constructor(ctx: Context<Update.CallbackQueryUpdate<CallbackQuery>>) {
     const {
       from = DEFAULT_FROM,

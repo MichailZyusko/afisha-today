@@ -1,45 +1,47 @@
 import { InlineKeyboardButton } from 'telegraf/types';
-import { Age, Busyness, Entertainment } from './enums';
+import {
+  Age, Agree, Busyness, EventAgreement, EventFeedback, EventFinish, Sex,
+} from './enums';
 
 export const AGREEMENT_ON_PERSONAL_DATA_PROCESSING_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
   [
-    { text: '✅ Согласен', callback_data: 'agree' },
-    { text: '❌ Не согласен', callback_data: 'disagree' },
+    { text: '✅ Согласен', callback_data: Agree.AGREE },
+    { text: '❌ Не согласен', callback_data: Agree.DISAGREE },
   ],
 ];
 
 export const SEX_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
   [
-    { text: '👱‍♂️', callback_data: 'male' },
-    { text: '👩‍🦰', callback_data: 'female' },
+    { text: '👱‍♂️', callback_data: Sex.MALE },
+    { text: '👩‍🦰', callback_data: Sex.FEMALE },
   ],
 ];
 
 export const EVENT_FEEDBACK_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
   [
-    { text: '👍', callback_data: 'like' },
-    { text: '👎', callback_data: 'dislike' },
+    { text: '👍', callback_data: EventFeedback.LIKE },
+    { text: '👎', callback_data: EventFeedback.DISLIKE },
   ],
 ];
 
 export const EVENT_AGREEMENT_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
   [
-    { text: '✅ Принять', callback_data: 'approve' },
-    { text: '⬅️ Назад', callback_data: 'back' },
+    { text: '✅ Принять', callback_data: EventAgreement.APPROVE },
+    { text: '⬅️ Назад', callback_data: EventAgreement.BACK },
   ],
 ];
 
 export const EVENT_FINISH_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
   [
-    { text: '✅ Выполнено', callback_data: 'done' },
-    { text: '❌ Отказ', callback_data: 'reject' },
+    { text: '✅ Выполнено', callback_data: EventFinish.DONE },
+    { text: '❌ Отказ', callback_data: EventFinish.REJECT },
   ],
 ];
 
 export const EVENT_ID_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
   [
     { text: '1️⃣', callback_data: '0' },
-    { text: '2️⃣', callback_data: '1' }
+    { text: '2️⃣', callback_data: '1' },
   ],
   [
     { text: '3️⃣', callback_data: '2' },

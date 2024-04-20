@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/indent */
+/* eslint-disable @typescript-eslint/indent, import/no-cycle */
 
 import {
   Column, CreateDateColumn, Entity,
@@ -8,7 +8,6 @@ import {
 } from 'typeorm';
 import { Partner } from './partner.entity';
 import { Entertainment } from './entertainment.entity';
-import { Age } from '../../../constants/enums';
 
 @Entity('events')
 export class Event {
@@ -35,17 +34,15 @@ export class Event {
   address: string;
 
   @Column()
-  location_url: string;
+  location: string;
 
   @Column()
   schedule: string;
 
   @Column({
-    type: 'enum',
-    enum: Age,
-    nullable: true,
+    default: false,
   })
-  age: Age;
+  is_adult_only: boolean;
 
   @Column()
   url: string;

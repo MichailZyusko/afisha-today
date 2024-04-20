@@ -1,67 +1,94 @@
 import { unlink } from 'fs/promises';
 import { bot } from '../bot';
-import { pathToAssets } from '../config';
 import { QRC } from '../services/qrcode';
 import { delay } from '../utils';
-import { Scenes } from '../constants/enums';
-import { DISAGREE_ON_PERSONAL_DATA_PROCESSING_MSG, START_SCENE_REPLICAS } from '../constants';
+import { Agree, Scenes } from '../constants/enums';
+import {
+  DISAGREE_ON_PERSONAL_DATA_PROCESSING_MSG,
+  START_SCENE_REPLICAS, DEFAULT_ERROR_MSG,
+} from '../constants';
 import { AGREEMENT_ON_PERSONAL_DATA_PROCESSING_KEYBOARD_MARKUP } from '../constants/keyboard_markup';
 import { UserDTO } from '../dto/user.dto';
-import database from '../services/database';
+import db from '../services/database';
 
 export class Commands {
   static async getMyQRCode() {
     bot.command('me', async (ctx) => {
-      const userId = ctx.from.id.toString();
+      try {
+        const userId = ctx?.from?.id?.toString();
 
-      await QRC.encode({
-        payload: {
+        const { path } = await QRC.encode({
+          payload: {
+            userId,
+            tmstmp: Date.now(),
+          },
           userId,
-          tmstmp: Date.now(),
-        },
-        userId,
-      });
-      await ctx.replyWithPhoto({ source: `${pathToAssets}/qrcode/${userId}.png` });
-      await unlink(`${pathToAssets}/qrcode/${userId}.png`);
+        });
+
+        await ctx.replyWithPhoto({ source: path });
+        await unlink(path);
+      } catch (error) {
+        console.error(error);
+        await ctx.reply(DEFAULT_ERROR_MSG);
+      }
     });
   }
 
   static async start() {
     bot.start(async (ctx) => {
-      await ctx.reply(START_SCENE_REPLICAS[0]);
-      await delay(0);
-      await ctx.reply(START_SCENE_REPLICAS[1]);
-      await delay(0);
-      await ctx.reply(START_SCENE_REPLICAS[2], {
-        reply_markup: {
-          inline_keyboard: AGREEMENT_ON_PERSONAL_DATA_PROCESSING_KEYBOARD_MARKUP,
-        },
-      });
+      try {
+        await ctx.reply(START_SCENE_REPLICAS[0]);
+        await delay(0);
+        await ctx.reply(START_SCENE_REPLICAS[1]);
+        await delay(0);
+        await ctx.reply(START_SCENE_REPLICAS[2], {
+          reply_markup: {
+            inline_keyboard: AGREEMENT_ON_PERSONAL_DATA_PROCESSING_KEYBOARD_MARKUP,
+          },
+        });
+      } catch (error) {
+        console.error(error);
+        await ctx.reply(DEFAULT_ERROR_MSG);
+      }
     });
   }
 
   static async agreeOnPersonalDataProcessing() {
-    bot.action('agree', async (ctx) => {
-      // !TODO: add errors handling
-      ctx.answerCbQuery();
+    bot.action(Agree.AGREE, async (ctx) => {
+      try {
+        await ctx.answerCbQuery();
 
-      const user = new UserDTO(ctx);
-      await database.usersRepository.upsert(user, ['id']);
+        const user = new UserDTO(ctx);
+        await db.usersRepository.upsert(user, ['id']);
 
-      await ctx.scene.enter(Scenes.REGISTRATION_SCENE);
+        await ctx.scene.enter(Scenes.REGISTRATION_SCENE);
+      } catch (error) {
+        console.error(error);
+        await ctx.reply(DEFAULT_ERROR_MSG);
+      }
     });
   }
 
   static async disagreeOnPersonalDataProcessing() {
-    bot.action('disagree', async (ctx) => {
-      await ctx.answerCbQuery();
-      await ctx.reply(DISAGREE_ON_PERSONAL_DATA_PROCESSING_MSG);
+    bot.action(Agree.DISAGREE, async (ctx) => {
+      try {
+        await ctx.answerCbQuery();
+        await ctx.reply(DISAGREE_ON_PERSONAL_DATA_PROCESSING_MSG);
+      } catch (error) {
+        console.error(error);
+        await ctx.reply(DEFAULT_ERROR_MSG);
+      }
     });
   }
 
   static async suggestNewEvent() {
     bot.command('new_event', async (ctx) => {
-      await ctx.scene.enter(Scenes.SUGGESTION_SCENE);
+      try {
+        await ctx.scene.enter(Scenes.SUGGESTION_SCENE);
+      } catch (error) {
+        console.error(error);
+        await ctx.reply(DEFAULT_ERROR_MSG);
+      }
     });
   }
 

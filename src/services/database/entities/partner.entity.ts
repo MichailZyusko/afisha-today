@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/indent */
+/* eslint-disable @typescript-eslint/indent, import/no-cycle */
 
 import {
   Column, CreateDateColumn, Entity,

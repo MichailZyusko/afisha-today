@@ -34,3 +34,28 @@ export enum EventState {
   NOT_STARTED = 'NOT_STARTED',
   DECLINED = 'DECLINED',
 }
+
+export enum Agree {
+  AGREE = 'AGREE',
+  DISAGREE = 'DISAGREE',
+}
+
+export enum Sex {
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
+}
+
+export enum EventFeedback {
+  LIKE = 'LIKE',
+  DISLIKE = 'DISLIKE',
+}
+
+export enum EventAgreement {
+  APPROVE = 'APPROVE',
+  BACK = 'BACK',
+}
+
+export enum EventFinish {
+  DONE = 'DONE',
+  REJECT = 'REJECT',
+}

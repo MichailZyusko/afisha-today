@@ -1,9 +1,11 @@
-
-import { Middleware } from "telegraf";
-import { Scenes } from "../../constants/enums";
-import { EVENT_AGREEMENT_KEYBOARD_MARKUP, EVENT_FEEDBACK_KEYBOARD_MARKUP, EVENT_FINISH_KEYBOARD_MARKUP, EVENT_ID_KEYBOARD_MARKUP } from "../../constants/keyboard_markup";
-import db from "../../services/database";
-import { EventDTO } from "../../dto/event.dto";
+import { Middleware } from 'telegraf';
+import { EventAgreement, Scenes } from '../../constants/enums';
+import {
+  EVENT_AGREEMENT_KEYBOARD_MARKUP, EVENT_FEEDBACK_KEYBOARD_MARKUP,
+  EVENT_FINISH_KEYBOARD_MARKUP, EVENT_ID_KEYBOARD_MARKUP,
+} from '../../constants/keyboard_markup';
+import db from '../../services/database';
+import { EventDTO } from '../../dto/event.dto';
 
 const recommendEvent: Middleware<any> = async (ctx) => {
   console.log(`${Scenes.SUGGESTION_SCENE}~STEP: 1`);
@@ -35,7 +37,7 @@ const recommendEvent: Middleware<any> = async (ctx) => {
   await ctx.replyWithMediaGroup(
     events.map(({ media }) => ({
       media,
-      type: 'photo'
+      type: 'photo',
     })),
   );
   await ctx.reply('Выбери то, что тебе больше окликаеться', {
@@ -78,9 +80,10 @@ const selectEvent: Middleware<any> = async (ctx) => {
 
   await ctx.answerCbQuery();
 
-  if (action === 'back') {
+  if (action === EventAgreement.BACK) {
+    await ctx.scene.leave();
     await ctx.scene.enter(Scenes.SUGGESTION_SCENE);
-    return
+    return undefined;
   }
 
   await ctx.reply(
@@ -102,8 +105,9 @@ const processEvent: Middleware<any> = async (ctx) => {
   await ctx.answerCbQuery();
   if (action === 'reject') {
     await ctx.reply('Миша, все хуйня, давай по новой!');
+    await ctx.scene.leave();
     await ctx.scene.enter(Scenes.SUGGESTION_SCENE);
-    return
+    return undefined;
   }
 
   await ctx.reply(
@@ -129,9 +133,9 @@ const collectFeedback: Middleware<any> = async (ctx) => {
     {
       reply_markup: {
         force_reply: true,
-        input_field_placeholder: "Оставьте свой отзыв",
+        input_field_placeholder: 'Оставьте свой отзыв',
       },
-    }
+    },
   );
 
   return ctx.wizard.next();
@@ -156,4 +160,4 @@ export const steps = [
   processEvent,
   collectFeedback,
   processEventFinish,
-]
+];

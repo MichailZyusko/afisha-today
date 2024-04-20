@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/indent */
 
 import {
-  Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn,
+  Column, CreateDateColumn, Entity,
+  JoinColumn, OneToOne, PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 import { Event } from './event.entity';
@@ -23,11 +25,18 @@ export class UserEvent {
   @Column({
     type: 'enum',
     enum: EventState,
+    default: EventState.NOT_STARTED,
   })
   state: EventState;
 
+  @Column({ nullable: true })
+  finished_at: Date;
+
+  @Column({ nullable: true })
+  started_at: Date;
+
   @Column()
-  expired_at: string;
+  expired_at: Date;
 
   @CreateDateColumn()
   created_at: Date;

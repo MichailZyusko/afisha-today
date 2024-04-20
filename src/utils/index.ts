@@ -1,4 +1,8 @@
-import { dateFormatterOptions } from '../constants';
+const dateFormatterOptions: Intl.DateTimeFormatOptions = {
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric',
+};
 
 export const delay = (delayInMS = 1e3) => new Promise((resolve) => {
   setTimeout(resolve, delayInMS);

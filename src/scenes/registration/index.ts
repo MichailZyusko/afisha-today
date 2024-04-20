@@ -2,7 +2,9 @@
 
 import { WizardScene } from 'telegraf/scenes';
 import { Context as TelegrafContext, Scenes as TelegrafScene } from 'telegraf';
-import { Age, Busyness, Scenes } from '../../constants/enums';
+import {
+  Age, Busyness, Scenes, Sex,
+} from '../../constants/enums';
 import { steps } from './steps';
 
 /**
@@ -15,7 +17,7 @@ import { steps } from './steps';
  */
 interface SessionWithUser extends TelegrafScene.WizardSession {
   user: {
-    sex: 'male' | 'female';
+    sex: Sex;
     age: Age;
     busyness: Busyness;
     entertainment_preference: number[];

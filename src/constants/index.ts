@@ -1,3 +1,5 @@
+import { deepTrim } from '../utils';
+
 export const DISAGREE_ON_PERSONAL_DATA_PROCESSING_MSG = 'Было приятно с тобой пообщаться, брат. Если передумаешь, напиши /start';
 
 export const START_SCENE_REPLICAS = {
@@ -15,8 +17,7 @@ export const INTRODUCTION_SCENE_REPLICAS = {
   4: 'Ты супер! Мы подготовили для тебя 2 задания на эту неделю!',
 };
 
-export const dateFormatterOptions: Intl.DateTimeFormatOptions = {
-  year: 'numeric',
-  month: 'numeric',
-  day: 'numeric',
-};
+export const DEFAULT_ERROR_MSG = deepTrim(`
+  Кажется что-то пошло не так. Попробуйте еще раз позже!
+  Спасибо за понимание 😉!
+`);

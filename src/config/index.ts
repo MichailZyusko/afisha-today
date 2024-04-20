@@ -1,1 +1,1 @@
-export const pathToAssets = './src/assets';
+export const PATH_TO_ASSETS = './src/assets';
