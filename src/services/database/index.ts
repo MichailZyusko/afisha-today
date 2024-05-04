@@ -4,6 +4,7 @@ import { Event } from './entities/event.entity';
 import { Entertainment } from './entities/entertainment.entity';
 import { UserEvent } from './entities/user_event.entity';
 import { Partner } from './entities/partner.entity';
+import { EventFeedback } from './entities/event_feedback.entity';
 
 class Database {
   private client?: DataSource;
@@ -17,6 +18,8 @@ class Database {
   entertainmentsRepository: Repository<Entertainment>;
 
   partnersRepository: Repository<Partner>;
+
+  eventFeedbacksRepository: Repository<EventFeedback>;
 
   constructor() {
     console.log('db initialization');
@@ -37,7 +40,10 @@ class Database {
           database: process.env.DB_NAME,
         }
       ),
-      entities: [User, Event, Entertainment, UserEvent, Partner],
+      entities: [
+        User, Event, Entertainment,
+        UserEvent, Partner, EventFeedback,
+      ],
       synchronize: true,
       cache: true,
       logging: true,
@@ -49,6 +55,7 @@ class Database {
     this.usersEventsRepository = this.client.getRepository(UserEvent);
     this.entertainmentsRepository = this.client.getRepository(Entertainment);
     this.partnersRepository = this.client.getRepository(Partner);
+    this.eventFeedbacksRepository = this.client.getRepository(EventFeedback);
   }
 
   async close(): Promise<void> {

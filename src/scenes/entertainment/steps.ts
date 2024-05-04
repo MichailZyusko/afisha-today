@@ -1,7 +1,7 @@
 import { Middleware } from 'telegraf';
 import { EventAgreement, Scenes } from '../../constants/enums';
 import {
-  EVENT_AGREEMENT_KEYBOARD_MARKUP, EVENT_FEEDBACK_KEYBOARD_MARKUP,
+  EVENT_AGREEMENT_KEYBOARD_MARKUP,
   EVENT_FINISH_KEYBOARD_MARKUP, EVENT_ID_KEYBOARD_MARKUP,
 } from '../../constants/keyboard_markup';
 import db from '../../services/database';
@@ -22,7 +22,7 @@ const recommendEvent: Middleware<any> = async (ctx) => {
   }
 
   const events = await db.query<Event[]>(
-    `SELECT * FROM suggest_events_for_user($1)`,
+    'SELECT * FROM suggest_events_for_user($1)',
     [userId],
   );
   console.log('🚀 ~ event:', events);
@@ -54,8 +54,10 @@ const getMoreDetails: Middleware<any> = async (ctx) => {
 
   const selectedEventId = ctx.update.callback_query.data;
   console.log('🚀 ~ selectedEventId:', selectedEventId);
+
   const event = ctx.scene.session.events.at(+selectedEventId);
   console.log('🚀 ~ event:', event);
+  ctx.scene.session.event = event;
 
   const { caption, media } = new EventDTO(event);
 
@@ -110,47 +112,12 @@ const processEvent: Middleware<any> = async (ctx) => {
     return undefined;
   }
 
-  await ctx.reply(
-    'Как тебе нравится? Спасибо!',
-    {
-      reply_markup: {
-        inline_keyboard: EVENT_FEEDBACK_KEYBOARD_MARKUP,
-      },
-    },
-  );
+  const eventId = ctx.scene.session.event.id;
 
-  return ctx.wizard.next();
-};
+  await ctx.scene.leave();
+  await ctx.scene.enter(Scenes.FEEDBACK_SCENE, { eventId });
 
-const collectFeedback: Middleware<any> = async (ctx) => {
-  console.log(`${Scenes.SUGGESTION_SCENE}~STEP: 5`);
-  const eventFeedback = ctx.update.callback_query.data;
-  console.log('🚀 ~ eventFeedback:', eventFeedback);
-
-  await ctx.answerCbQuery();
-  await ctx.reply(
-    'Можешь оставить свой письменный отзыв? Что было хорошо? Что можно улучшить?',
-    {
-      reply_markup: {
-        force_reply: true,
-        input_field_placeholder: 'Оставьте свой отзыв',
-      },
-    },
-  );
-
-  return ctx.wizard.next();
-};
-
-const processEventFinish: Middleware<any> = async (ctx) => {
-  console.log(`${Scenes.SUGGESTION_SCENE}~STEP: 6`);
-  const eventComment = ctx.update.message.text;
-  console.log('🚀 ~ eventFeedback:', eventComment);
-
-  await ctx.reply(
-    'Отлично! Спасибо за твой отзыв. Если захочешь еще, просто кликни на /new_event',
-  );
-
-  return ctx.scene.leave();
+  return undefined;
 };
 
 export const steps = [
@@ -158,6 +125,4 @@ export const steps = [
   getMoreDetails,
   selectEvent,
   processEvent,
-  collectFeedback,
-  processEventFinish,
 ];

@@ -1,10 +1,12 @@
-/* eslint-disable @typescript-eslint/indent */
+/* eslint-disable @typescript-eslint/indent, import/no-cycle */
 
 import {
   Column, CreateDateColumn, Entity,
+  OneToMany,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { EventFeedback } from './event_feedback.entity';
 import { Age, Busyness } from '../../../constants/enums';
 
 @Entity('users')
@@ -50,6 +52,9 @@ export class User {
     default: [],
   })
   entertainment_preference: number[];
+
+  @OneToMany(() => EventFeedback, (feedback) => feedback.event)
+  feedbacks: EventFeedback[];
 
   @CreateDateColumn()
   created_at: Date;
