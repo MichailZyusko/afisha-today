@@ -6,6 +6,7 @@ import { Agree, Scenes } from '../constants/enums';
 import {
   DISAGREE_ON_PERSONAL_DATA_PROCESSING_MSG,
   START_SCENE_REPLICAS, DEFAULT_ERROR_MSG,
+  REACH_MAX_USERS_ERROR,
 } from '../constants';
 import { AGREEMENT_ON_PERSONAL_DATA_PROCESSING_KEYBOARD_MARKUP } from '../constants/keyboard_markup';
 import { UserDTO } from '../dto/user.dto';
@@ -57,6 +58,12 @@ export class Commands {
     bot.action(Agree.AGREE, async (ctx) => {
       try {
         await ctx.answerCbQuery();
+        const isAllowedToCreateNewUser = await db.query('SELECT valid_user_count()');
+
+        if (!isAllowedToCreateNewUser) {
+          await ctx.reply(REACH_MAX_USERS_ERROR);
+          return;
+        }
 
         const user = new UserDTO(ctx);
         await db.usersRepository.upsert(user, ['id']);

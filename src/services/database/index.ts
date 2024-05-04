@@ -5,6 +5,7 @@ import { Entertainment } from './entities/entertainment.entity';
 import { UserEvent } from './entities/user_event.entity';
 import { Partner } from './entities/partner.entity';
 import { EventFeedback } from './entities/event_feedback.entity';
+import { AppSettings } from './entities/app_settings.entity';
 
 class Database {
   private client?: DataSource;
@@ -43,6 +44,7 @@ class Database {
       entities: [
         User, Event, Entertainment,
         UserEvent, Partner, EventFeedback,
+        AppSettings,
       ],
       synchronize: true,
       cache: true,
