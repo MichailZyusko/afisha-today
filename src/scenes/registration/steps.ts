@@ -1,5 +1,5 @@
 import { Middleware } from 'telegraf';
-import { INTRODUCTION_SCENE_REPLICAS } from '../../constants';
+import { INTRODUCTION_SCENE_REPLICAS, REGISTRATION_EVENTS_COUNT } from '../../constants';
 import { EventFeedback, Scenes, Sex } from '../../constants/enums';
 import {
   AGE_KEYBOARD_MARKUP,
@@ -37,6 +37,7 @@ const processAgeSelection: Middleware<any> = async (ctx) => {
   };
   ctx.scene.session.entertainments_preference = [];
   ctx.scene.session.step = 0;
+  ctx.scene.session.msgId = null;
 
   await ctx.answerCbQuery();
   await ctx.reply(INTRODUCTION_SCENE_REPLICAS[1], {
@@ -58,7 +59,7 @@ const processEventSelection: Middleware<any> = async (ctx) => {
 
   await ctx.answerCbQuery();
   await ctx.reply(INTRODUCTION_SCENE_REPLICAS[2]);
-  await ctx.replyWithPhoto(
+  const { message_id: msgId } = await ctx.replyWithPhoto(
     { url: media },
     {
       caption,
@@ -68,6 +69,7 @@ const processEventSelection: Middleware<any> = async (ctx) => {
       },
     },
   );
+  ctx.scene.session.msgId = msgId;
 
   return ctx.wizard.next();
 };
@@ -88,16 +90,17 @@ const processEventFeedback: Middleware<any> = async (ctx) => {
   const { caption, media } = new EventDTO(EVENTS_SEED[step]);
 
   await ctx.answerCbQuery();
-  await ctx.replyWithPhoto(
-    { url: media },
-    {
-      caption,
-      parse_mode: 'HTML',
-      reply_markup: {
-        inline_keyboard: EVENT_FEEDBACK_KEYBOARD_MARKUP,
-      },
+  await ctx.editMessageMedia({
+    media: { url: media },
+    type: 'photo',
+    caption,
+    parse_mode: 'HTML',
+  }, {
+    message_id: ctx.scene.session.msgId,
+    reply_markup: {
+      inline_keyboard: EVENT_FEEDBACK_KEYBOARD_MARKUP,
     },
-  );
+  });
 
   return ctx.wizard.next();
 };
@@ -131,9 +134,6 @@ export const steps = [
   processSexSelection,
   processAgeSelection,
   processEventSelection,
-  processEventFeedback,
-  processEventFeedback,
-  processEventFeedback,
-  processEventFeedback,
+  ...(new Array(REGISTRATION_EVENTS_COUNT).fill(processEventFeedback)),
   processEventFinish,
 ];

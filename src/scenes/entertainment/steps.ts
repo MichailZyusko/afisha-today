@@ -5,6 +5,7 @@ import {
   EVENT_FINISH_KEYBOARD_MARKUP, EVENT_ID_KEYBOARD_MARKUP,
 } from '../../constants/keyboard_markup';
 import db from '../../services/database';
+import { Event } from '../../services/database/entities/event.entity';
 import { EventDTO } from '../../dto/event.dto';
 
 const recommendEvent: Middleware<any> = async (ctx) => {
@@ -20,11 +21,10 @@ const recommendEvent: Middleware<any> = async (ctx) => {
     return ctx.scene.leave();
   }
 
-  // const events = await database.query<Event[]>(
-  //   `SELECT * FROM suggest_events_for_user($1)`,
-  //   [userId],
-  // );
-  const events = await db.eventsRepository.find();
+  const events = await db.query<Event[]>(
+    `SELECT * FROM suggest_events_for_user($1)`,
+    [userId],
+  );
   console.log('🚀 ~ event:', events);
   ctx.scene.session.events = events;
 
