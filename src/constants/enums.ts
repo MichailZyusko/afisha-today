@@ -33,6 +33,8 @@ export enum EventState {
   COMPLETED = 'COMPLETED',
   IN_PROGRESS = 'IN_PROGRESS',
   NOT_STARTED = 'NOT_STARTED',
+
+  VIEWED = 'VIEWED',
   DECLINED = 'DECLINED',
 }
 

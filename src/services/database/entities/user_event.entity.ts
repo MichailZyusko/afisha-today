@@ -8,6 +8,7 @@ import {
 import { User } from './user.entity';
 import { Event } from './event.entity';
 import { EventState } from '../../../constants/enums';
+import { ONE_WEEK_IN_MS } from '../../../constants/time';
 
 @Entity('users_events')
 export class UserEvent {
@@ -35,7 +36,7 @@ export class UserEvent {
   @Column({ nullable: true })
   started_at: Date;
 
-  @Column()
+  @Column({ default: new Date(Date.now() + ONE_WEEK_IN_MS) })
   expired_at: Date;
 
   @CreateDateColumn()

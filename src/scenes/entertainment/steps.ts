@@ -1,5 +1,5 @@
 import { Middleware } from 'telegraf';
-import { EventAgreement, Scenes } from '../../constants/enums';
+import { EventAgreement, EventState, Scenes } from '../../constants/enums';
 import {
   EVENT_AGREEMENT_KEYBOARD_MARKUP,
   EVENT_FINISH_KEYBOARD_MARKUP, EVENT_ID_KEYBOARD_MARKUP,
@@ -88,6 +88,18 @@ const selectEvent: Middleware<any> = async (ctx) => {
     return undefined;
   }
 
+  const eventId = ctx.scene.session.event.id;
+  const userId = ctx.from.id;
+
+  const { id } = await db.usersEventsRepository.save({
+    user_id: userId,
+    event_id: eventId,
+    started_at: new Date(),
+    state: EventState.IN_PROGRESS,
+  });
+
+  ctx.scene.session.userEventId = id;
+
   await ctx.reply(
     'Отличный вкус! Дай знать когда выполнишь задание. Спасибо!',
     {
@@ -104,15 +116,32 @@ const processEvent: Middleware<any> = async (ctx) => {
   console.log(`${Scenes.SUGGESTION_SCENE}~STEP: 4`);
   const action = ctx.update.callback_query.data;
 
+  const eventId = ctx.scene.session.event.id;
+  const { userEventId } = ctx.scene.session;
+
   await ctx.answerCbQuery();
   if (action === 'reject') {
+    await db.usersEventsRepository.update(
+      { id: userEventId },
+      {
+        finished_at: new Date(),
+        state: EventState.DECLINED,
+      },
+    );
+
     await ctx.reply('Миша, все хуйня, давай по новой!');
     await ctx.scene.leave();
     await ctx.scene.enter(Scenes.SUGGESTION_SCENE);
     return undefined;
   }
 
-  const eventId = ctx.scene.session.event.id;
+  await db.usersEventsRepository.update(
+    { id: userEventId },
+    {
+      finished_at: new Date(),
+      state: EventState.COMPLETED,
+    },
+  );
 
   await ctx.scene.leave();
   await ctx.scene.enter(Scenes.FEEDBACK_SCENE, { eventId });
