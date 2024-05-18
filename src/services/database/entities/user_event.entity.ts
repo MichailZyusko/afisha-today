@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/indent */
+/* eslint-disable @typescript-eslint/indent, import/no-cycle */
 
 import {
   Column, CreateDateColumn, Entity,
-  JoinColumn, OneToOne, PrimaryGeneratedColumn,
+  JoinColumn, ManyToOne, PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from './user.entity';
@@ -15,11 +15,11 @@ export class UserEvent {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @OneToOne(() => User)
+  @ManyToOne(() => User, (user) => user.id)
   @JoinColumn({ name: 'user_id' })
   user_id: string;
 
-  @OneToOne(() => Event)
+  @ManyToOne(() => Event, (event) => event.id)
   @JoinColumn({ name: 'event_id' })
   event_id: string;
 
