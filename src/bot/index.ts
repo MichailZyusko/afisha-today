@@ -27,6 +27,10 @@ bot.use(timeLogMiddleware);
 bot.use(session());
 bot.use(stage.middleware());
 
+bot.catch((e) => {
+  console.error(e);
+});
+
 // Enable graceful stop
 process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));

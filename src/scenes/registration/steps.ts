@@ -16,7 +16,7 @@ const processSexSelection: Middleware<any> = async (ctx) => {
   console.log(`${Scenes.REGISTRATION_SCENE}~STEP: 1`);
   const fullName = `${ctx.from.first_name} ${ctx.from.last_name ?? ''}`;
   await ctx.reply(`
-      Привет ${fullName}!\nТеперь заполни анкету, чтобы мы могли подобрать задания лично под тебя
+    Привет ${fullName}!\nТеперь заполни, пожалуйста, анкету, чтобы мы могли подобрать задания лично под тебя!
   `);
 
   await delay(0);
@@ -125,7 +125,7 @@ const processEventFinish: Middleware<any> = async (ctx) => {
   });
 
   await ctx.answerCbQuery();
-  await ctx.reply(INTRODUCTION_SCENE_REPLICAS[4]);
+  await ctx.reply(INTRODUCTION_SCENE_REPLICAS[3]);
   await ctx.scene.leave();
   await ctx.scene.enter(Scenes.SUGGESTION_SCENE);
 };
