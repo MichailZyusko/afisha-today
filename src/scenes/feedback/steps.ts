@@ -12,7 +12,6 @@ const processEvent: Middleware<any> = async (ctx) => {
 
   ctx.scene.session.feedback = {};
 
-  await ctx.answerCbQuery();
   await ctx.reply(
     'Как тебе нравится? Спасибо!',
     {
@@ -32,8 +31,8 @@ const collectFeedback: Middleware<any> = async (ctx) => {
 
   ctx.scene.session.feedback.is_liked = eventFeedback === EventFeedback.LIKE;
 
-  await ctx.answerCbQuery();
-  await ctx.reply(
+  await ctx.deleteMessage();
+  const { message_id: msgId } = await ctx.reply(
     'Можешь оставить свой письменный отзыв? Что было хорошо? Что можно улучшить?',
     {
       reply_markup: {
@@ -42,6 +41,7 @@ const collectFeedback: Middleware<any> = async (ctx) => {
       },
     },
   );
+  ctx.scene.session.msgId = msgId;
 
   return ctx.wizard.next();
 };
@@ -49,9 +49,11 @@ const collectFeedback: Middleware<any> = async (ctx) => {
 const processEventFinish: Middleware<any> = async (ctx) => {
   console.log(`${Scenes.FEEDBACK_SCENE}~STEP: 3`);
 
+  await ctx.deleteMessage();
   const eventComment = ctx.update.message.text;
   console.log('🚀 ~ eventComment:', eventComment);
 
+  await ctx.deleteMessage(ctx.scene.session.msgId);
   await ctx.reply(
     'Отлично! Спасибо за твой отзыв. Если захочешь еще, просто кликни на /new_event',
   );

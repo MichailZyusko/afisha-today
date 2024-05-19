@@ -6,7 +6,7 @@ import {
   EVENT_FEEDBACK_KEYBOARD_MARKUP,
   SEX_KEYBOARD_MARKUP,
 } from '../../constants/keyboard_markup';
-import { delay } from '../../utils';
+import { deepTrim } from '../../utils';
 import { EventDTO } from '../../dto/event.dto';
 import { EVENTS_SEED } from '../../services/database/seeds/event.seed';
 import { UserDTO } from '../../dto/user.dto';
@@ -15,16 +15,19 @@ import db from '../../services/database';
 const processSexSelection: Middleware<any> = async (ctx) => {
   console.log(`${Scenes.REGISTRATION_SCENE}~STEP: 1`);
   const fullName = `${ctx.from.first_name} ${ctx.from.last_name ?? ''}`;
-  await ctx.reply(`
-    Привет ${fullName}!\nТеперь заполни, пожалуйста, анкету, чтобы мы могли подобрать задания лично под тебя!
-  `);
 
-  await delay(0);
-  await ctx.reply(INTRODUCTION_SCENE_REPLICAS[0], {
-    reply_markup: {
-      inline_keyboard: SEX_KEYBOARD_MARKUP,
+  await ctx.reply(
+    deepTrim(`
+      Привет ${fullName}!\nТеперь заполни, пожалуйста, анкету, чтобы мы могли подобрать задания лично под тебя!
+
+      ${INTRODUCTION_SCENE_REPLICAS[0]}
+    `),
+    {
+      reply_markup: {
+        inline_keyboard: SEX_KEYBOARD_MARKUP,
+      },
     },
-  });
+  );
 
   return ctx.wizard.next();
 };
@@ -38,8 +41,9 @@ const processAgeSelection: Middleware<any> = async (ctx) => {
   ctx.scene.session.entertainments_preference = [];
   ctx.scene.session.step = 0;
   ctx.scene.session.msgId = null;
+  ctx.scene.session.msgIds = [];
 
-  await ctx.answerCbQuery();
+  await ctx.deleteMessage();
   await ctx.reply(INTRODUCTION_SCENE_REPLICAS[1], {
     reply_markup: {
       inline_keyboard: AGE_KEYBOARD_MARKUP,
@@ -57,9 +61,11 @@ const processEventSelection: Middleware<any> = async (ctx) => {
   const { step } = ctx.scene.session;
   const { caption, media } = new EventDTO(EVENTS_SEED[step]);
 
-  await ctx.answerCbQuery();
-  await ctx.reply(INTRODUCTION_SCENE_REPLICAS[2]);
-  const { message_id: msgId } = await ctx.replyWithPhoto(
+  await ctx.deleteMessage();
+  const { message_id: msgId } = await ctx.reply(INTRODUCTION_SCENE_REPLICAS[2]);
+
+  ctx.scene.session.msgIds.push(msgId);
+  const { message_id: lastMsgId } = await ctx.replyWithPhoto(
     { url: media },
     {
       caption,
@@ -69,7 +75,7 @@ const processEventSelection: Middleware<any> = async (ctx) => {
       },
     },
   );
-  ctx.scene.session.msgId = msgId;
+  ctx.scene.session.msgId = lastMsgId;
 
   return ctx.wizard.next();
 };
@@ -124,10 +130,10 @@ const processEventFinish: Middleware<any> = async (ctx) => {
     entertainment_preference: [...new Set(entertainmentPreference)],
   });
 
-  await ctx.answerCbQuery();
-  await ctx.reply(INTRODUCTION_SCENE_REPLICAS[3]);
+  await ctx.deleteMessages([...ctx.scene.session.msgIds, ctx.scene.session.msgId]);
+  const { message_id: msgId } = await ctx.reply(INTRODUCTION_SCENE_REPLICAS[3]);
   await ctx.scene.leave();
-  await ctx.scene.enter(Scenes.SUGGESTION_SCENE);
+  await ctx.scene.enter(Scenes.SUGGESTION_SCENE, { msgId });
 };
 
 export const steps = [

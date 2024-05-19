@@ -1,7 +1,6 @@
 import { unlink } from 'fs/promises';
 import { bot } from '../bot';
 import { QRC } from '../services/qrcode';
-import { delay } from '../utils';
 import { Agree, Scenes } from '../constants/enums';
 import {
   DISAGREE_ON_PERSONAL_DATA_PROCESSING_MSG,
@@ -38,11 +37,7 @@ export class Commands {
   static async start() {
     bot.start(async (ctx) => {
       try {
-        await ctx.reply(START_SCENE_REPLICAS[0]);
-        await delay(0);
-        await ctx.reply(START_SCENE_REPLICAS[1]);
-        await delay(0);
-        await ctx.reply(START_SCENE_REPLICAS[2], {
+        await ctx.reply(START_SCENE_REPLICAS[0], {
           reply_markup: {
             inline_keyboard: AGREEMENT_ON_PERSONAL_DATA_PROCESSING_KEYBOARD_MARKUP,
           },
@@ -57,7 +52,7 @@ export class Commands {
   static async agreeOnPersonalDataProcessing() {
     bot.action(Agree.AGREE, async (ctx) => {
       try {
-        await ctx.answerCbQuery();
+        await ctx.deleteMessage();
         const isAllowedToCreateNewUser = await db.query('SELECT valid_user_count()');
 
         if (!isAllowedToCreateNewUser) {
@@ -79,7 +74,7 @@ export class Commands {
   static async disagreeOnPersonalDataProcessing() {
     bot.action(Agree.DISAGREE, async (ctx) => {
       try {
-        await ctx.answerCbQuery();
+        await ctx.deleteMessage();
         await ctx.reply(DISAGREE_ON_PERSONAL_DATA_PROCESSING_MSG);
       } catch (error) {
         console.error(error);
