@@ -24,12 +24,36 @@ const processEvent: Middleware<any> = async (ctx) => {
   return ctx.wizard.next();
 };
 
-const collectFeedback: Middleware<any> = async (ctx) => {
+const collectPhotoProof: Middleware<any> = async (ctx) => {
   console.log(`${Scenes.FEEDBACK_SCENE}~STEP: 2`);
-  const eventFeedback = ctx.update.callback_query.data;
+  const eventFeedback = ctx.update?.callback_query?.data;
   console.log('🚀 ~ eventFeedback:', eventFeedback);
 
   ctx.scene.session.feedback.is_liked = eventFeedback === EventFeedback.LIKE;
+
+  await ctx.deleteMessage();
+  const { message_id: msgId } = await ctx.reply(
+    'Можешь оставить свой фото отзыв?',
+    {
+      reply_markup: {
+        force_reply: true,
+        input_field_placeholder: 'только не дик пик',
+      },
+    },
+  );
+  ctx.scene.session.msgId = msgId;
+
+  return ctx.wizard.next();
+};
+
+const collectFeedback: Middleware<any> = async (ctx) => {
+  console.log(`${Scenes.FEEDBACK_SCENE}~STEP: 3`);
+
+  const photo = ctx?.update?.message?.photo.at(-1);
+  const fileId = photo?.file_id;
+
+  const photoLink = await ctx.telegram.getFileLink(fileId);
+  ctx.scene.session.feedback.photo_proof = photoLink;
 
   await ctx.deleteMessage();
   const { message_id: msgId } = await ctx.reply(
@@ -47,7 +71,7 @@ const collectFeedback: Middleware<any> = async (ctx) => {
 };
 
 const processEventFinish: Middleware<any> = async (ctx) => {
-  console.log(`${Scenes.FEEDBACK_SCENE}~STEP: 3`);
+  console.log(`${Scenes.FEEDBACK_SCENE}~STEP: 4`);
 
   await ctx.deleteMessage();
   const eventComment = ctx.update.message.text;
@@ -79,6 +103,7 @@ const processEventFinish: Middleware<any> = async (ctx) => {
 
 export const steps = [
   processEvent,
+  collectPhotoProof,
   collectFeedback,
   processEventFinish,
 ];
