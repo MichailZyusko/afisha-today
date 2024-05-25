@@ -20,19 +20,17 @@ export class EventDTO {
       ? deepTrim(`
         Предлагаю посмотреть на <b>"${event.name}"</b> ${event.is_adult_only ? '🔞' : ''}
         В двух словах это ${event.description}
-        💰: ${event.price} Br
+        💰: ${event.price} ${parseInt(event.price, 10) ? 'Br' : ''}
         📍: <a href="${event.location}" >${event.address}</a>
-        🕔: ${event.schedule}
-        ${workingPeriod === ALWAYS_AVAILABLE ? '' : `🗓: ${workingPeriod}`}
+        🕔: ${event.schedule}${workingPeriod === ALWAYS_AVAILABLE ? '' : `\n🗓: ${workingPeriod}`}
         🌐: <a href="${event.url}" >${event.name}</a>
   `)
       : deepTrim(`
         Предлагаю посмотреть на <b>"${event.name}"</b> ${event.is_adult_only ? '🔞' : ''}
         В двух словах это ${event.description}
-        💰: ${event.price} Br
+        💰: ${event.price} ${parseInt(event.price, 10) ? 'Br' : ''}
         📍: <a href="${event.location}" >${event.address}</a>
-        🕔: ${event.schedule}
-        ${workingPeriod === ALWAYS_AVAILABLE ? '' : `🗓: ${workingPeriod}`}
+        🕔: ${event.schedule}${workingPeriod === ALWAYS_AVAILABLE ? '' : `\n🗓: ${workingPeriod}`}
         🌐: <a href="${event.url}" >${event.name}</a>
   `);
   }
