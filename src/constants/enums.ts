@@ -53,6 +53,11 @@ export enum EventFeedback {
   DISLIKE = 'DISLIKE',
 }
 
+export enum EventFeedbackFinish {
+  LEAVE_FEEDBACK = 'LEAVE_FEEDBACK',
+  GET_NEW_EVENT = 'GET_NEW_EVENT',
+}
+
 export enum EventAgreement {
   APPROVE = 'APPROVE',
   BACK = 'BACK',

@@ -1,6 +1,8 @@
 import { InlineKeyboardButton } from 'telegraf/types';
 import {
-  Age, Agree, Busyness, EventAgreement, EventFeedback, EventFinish, Sex,
+  Age, Agree, Busyness,
+  EventAgreement, EventFeedback,
+  EventFeedbackFinish, EventFinish, Sex,
 } from './enums';
 
 export const AGREEMENT_ON_PERSONAL_DATA_PROCESSING_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
@@ -21,6 +23,13 @@ export const EVENT_FEEDBACK_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
   [
     { text: '👍', callback_data: EventFeedback.LIKE },
     { text: '👎', callback_data: EventFeedback.DISLIKE },
+  ],
+];
+
+export const EVENT_FEEDBACK_FINISH_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
+  [
+    { text: '📝 Оставить отзыв', callback_data: EventFeedbackFinish.LEAVE_FEEDBACK },
+    { text: '🆕 Получить новое задание', callback_data: EventFeedbackFinish.GET_NEW_EVENT },
   ],
 ];
 

@@ -1,6 +1,7 @@
 import { Middleware } from 'telegraf';
-import { EventFeedback, Scenes } from '../../constants/enums';
+import { EventFeedback, EventFeedbackFinish, Scenes } from '../../constants/enums';
 import {
+  EVENT_FEEDBACK_FINISH_KEYBOARD_MARKUP,
   EVENT_FEEDBACK_KEYBOARD_MARKUP,
 } from '../../constants/keyboard_markup';
 import db from '../../services/database';
@@ -11,11 +12,11 @@ const collectPhotoProof: Middleware<any> = async (ctx) => {
   console.log(`${Scenes.FEEDBACK_SCENE}~STEP: 1`);
 
   const { message_id: msgId } = await ctx.reply(
-    'Можешь оставить свой фото отзыв?',
+    'Можешь оставить свой фото-подтверждение?',
     {
       reply_markup: {
         force_reply: true,
-        input_field_placeholder: 'только не дик пик',
+        input_field_placeholder: 'Фото чека или свои счастливые лица напротив заведения',
       },
     },
   );
@@ -59,11 +60,10 @@ const collectFeedback: Middleware<any> = async (ctx) => {
   ctx.scene.session.feedback.is_liked = eventFeedback === EventFeedback.LIKE;
 
   const { message_id: msgId } = await ctx.reply(
-    'Можешь оставить свой письменный отзыв? Что было хорошо? Что можно улучшить?',
+    'Спасибо за твой отзыв! Если вдруг у тебя есть чем поделиться, то оставь это ниже или начни сначала',
     {
       reply_markup: {
-        force_reply: true,
-        input_field_placeholder: 'Оставьте свой отзыв',
+        inline_keyboard: EVENT_FEEDBACK_FINISH_KEYBOARD_MARKUP,
       },
     },
   );
@@ -77,13 +77,51 @@ const processEventFinish: Middleware<any> = async (ctx) => {
   console.log(`${Scenes.FEEDBACK_SCENE}~STEP: 4`);
   await ctx.deleteMessage();
 
+  const action = ctx.update.callback_query.data;
+
+  if (action === EventFeedbackFinish.GET_NEW_EVENT) {
+    const event = new Event();
+    event.id = ctx.scene.state.eventId;
+
+    const user = new User();
+    user.id = ctx.from.id;
+
+    const eventFeedback = {
+      ...ctx.scene.session.feedback,
+      event,
+      user,
+    };
+    console.log('🚀 ~ eventFeedback:', eventFeedback);
+
+    await db.eventFeedbacksRepository.save(eventFeedback);
+
+    await ctx.scene.leave();
+    await ctx.scene.enter(Scenes.SUGGESTION_SCENE);
+    return undefined;
+  }
+
+  const { message_id: msgId } = await ctx.reply(
+    'Можешь оставить свой письменный отзыв? Что было хорошо? Что можно улучшить?',
+    {
+      reply_markup: {
+        force_reply: true,
+        input_field_placeholder: 'Мне все понравилось потому что...',
+      },
+    },
+  );
+  ctx.scene.session.msgId = msgId;
+
+  return ctx.wizard.next();
+};
+
+const processEventFinishWithComment: Middleware<any> = async (ctx) => {
+  console.log(`${Scenes.FEEDBACK_SCENE}~STEP: 5`);
+
+  await ctx.deleteMessage();
+  await ctx.deleteMessage(ctx.scene.session.msgId);
+
   const eventComment = ctx.update.message.text;
   console.log('🚀 ~ eventComment:', eventComment);
-
-  await ctx.deleteMessage(ctx.scene.session.msgId);
-  await ctx.reply(
-    'Отлично! Спасибо за твой отзыв. Если захочешь еще, просто кликни на /new_event',
-  );
 
   const event = new Event();
   event.id = ctx.scene.state.eventId;
@@ -101,7 +139,28 @@ const processEventFinish: Middleware<any> = async (ctx) => {
 
   await db.eventFeedbacksRepository.save(eventFeedback);
 
-  return ctx.scene.leave();
+  await ctx.reply('Спасибо за отзыв!', {
+    reply_markup: {
+      inline_keyboard: [
+        [{
+          text: '🆕 Получить новое задание',
+          callback_data: EventFeedbackFinish.GET_NEW_EVENT,
+        }],
+      ],
+    },
+  });
+
+  return ctx.wizard.next();
+};
+
+const startNewEvent: Middleware<any> = async (ctx) => {
+  console.log(`${Scenes.FEEDBACK_SCENE}~STEP: 6`);
+
+  await ctx.deleteMessage();
+  await ctx.scene.leave();
+  await ctx.scene.enter(Scenes.SUGGESTION_SCENE);
+
+  return undefined;
 };
 
 export const steps = [
@@ -109,4 +168,6 @@ export const steps = [
   processEvent,
   collectFeedback,
   processEventFinish,
+  processEventFinishWithComment,
+  startNewEvent,
 ];
