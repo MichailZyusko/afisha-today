@@ -26,7 +26,9 @@ export class EventFeedback {
   @Column({ nullable: true })
   is_liked: boolean;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   comment: string;
 
   @Column({

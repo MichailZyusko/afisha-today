@@ -28,26 +28,47 @@ const collectPhotoProof: Middleware<any> = async (ctx) => {
 };
 
 const processEvent: Middleware<any> = async (ctx) => {
-  console.log(`${Scenes.FEEDBACK_SCENE}~STEP: 2`);
+  if (ctx.scene.state.msgId) {
+    await ctx.deleteMessage(ctx.scene.state.msgId);
+  }
+
   await ctx.deleteMessage();
 
-  const photo = ctx?.update?.message?.photo.at(-1);
-  const fileId = photo?.file_id;
+  try {
+    console.log(`${Scenes.FEEDBACK_SCENE}~STEP: 2`);
 
-  const photoLink = await ctx.telegram.getFileLink(fileId);
-  ctx.scene.session.feedback.photo_proof = photoLink;
+    const photo = ctx?.update?.message?.photo.at(-1);
+    const fileId = photo?.file_id;
+    const photoLink = await ctx.telegram.getFileLink(fileId);
 
-  await ctx.deleteMessage(ctx.scene.session.msgId);
-  await ctx.reply(
-    'Как тебе нравится? Спасибо!',
-    {
-      reply_markup: {
-        inline_keyboard: EVENT_FEEDBACK_KEYBOARD_MARKUP,
+    ctx.scene.session.feedback.photo_proof = photoLink;
+
+    await ctx.deleteMessage(ctx.scene.session.msgId);
+    await ctx.reply(
+      'Как тебе нравится? Спасибо!',
+      {
+        reply_markup: {
+          inline_keyboard: EVENT_FEEDBACK_KEYBOARD_MARKUP,
+        },
       },
-    },
-  );
+    );
 
-  return ctx.wizard.next();
+    return ctx.wizard.next();
+  } catch (error) {
+    console.error(error);
+
+    const { message_id: msgId } = await ctx.reply(
+      'Пожалуйста, пришли свой фото-подтверждение, а не просто текст',
+    );
+    await ctx.deleteMessage(ctx.scene.session.msgId);
+    await ctx.scene.leave();
+    await ctx.scene.enter(Scenes.FEEDBACK_SCENE, {
+      eventId: ctx.scene.state.eventId,
+      msgId,
+    });
+
+    return undefined;
+  }
 };
 
 const collectFeedback: Middleware<any> = async (ctx) => {
