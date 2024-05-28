@@ -27,7 +27,7 @@ const recommendEvent: Middleware<any> = async (ctx) => {
       'SELECT * FROM suggest_events_for_user($1)',
       [userId],
     );
-    console.log('🚀 ~ event:', events);
+
     ctx.scene.session.events = events;
 
     if (!events.length) {
@@ -68,16 +68,12 @@ const getMoreDetails: Middleware<any> = async (ctx) => {
     console.log(`${Scenes.SUGGESTION_SCENE}~STEP: 2`);
 
     const selectedEventId = ctx.update.callback_query.data;
-    console.log('🚀 ~ selectedEventId:', selectedEventId);
-
     const event = ctx.scene.session.events.at(+selectedEventId);
-    console.log('🚀 ~ event:', event);
     ctx.scene.session.event = event;
+    console.log('🚀 ~ event:', event);
 
     const { caption, media } = new EventDTO(event);
-    console.log('🚀 ~ media:', media);
 
-    console.log(ctx.scene.session.msgIds);
     await ctx.deleteMessages([...ctx.scene.session.msgIds, ctx.scene.state.msgId].filter(Boolean));
     ctx.scene.state.msgId = null;
 

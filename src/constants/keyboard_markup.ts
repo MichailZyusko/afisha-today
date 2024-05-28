@@ -1,6 +1,7 @@
 import { InlineKeyboardButton } from 'telegraf/types';
 import {
   Age, Agree, Busyness,
+  Entertainment,
   EventAgreement, EventFeedback,
   EventFeedbackFinish, EventFinish, Sex,
 } from './enums';
@@ -86,5 +87,113 @@ export const BUSYNESS_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
   ],
   [
     { text: 'больше 4 ч.', callback_data: Busyness.HIGH },
+  ],
+];
+
+export const FREE_TIME_PREFERENCES_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
+  [
+    {
+      text: 'Один',
+      callback_data: JSON.stringify([]),
+    },
+    {
+      text: 'В компании друзей (второй половинки)',
+      callback_data: JSON.stringify([
+        Entertainment.WITH_FRIENDS, Entertainment.FOR_COUPLES,
+        Entertainment.TEAM,
+      ]),
+    },
+  ],
+];
+
+export const ACTIVE_SPORTS_PREFERENCES_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
+  [
+    {
+      text: 'Класс, нравиться',
+      callback_data: JSON.stringify([
+        Entertainment.ACTIVITIES, Entertainment.SPORT,
+        Entertainment.EXTREME,
+      ]),
+    },
+    {
+      text: 'Не очень',
+      callback_data: JSON.stringify([]),
+    },
+  ],
+];
+
+export const SELF_EDUCATION_PREFERENCES_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
+  [
+    {
+      text: 'Да',
+      callback_data: JSON.stringify([
+        Entertainment.SELF_DEVELOPMENT, Entertainment.MASTER_CLASSES,
+        Entertainment.ENLIGHTENMENT,
+      ]),
+    },
+    {
+      text: 'Нет',
+      callback_data: JSON.stringify([]),
+    },
+  ],
+];
+
+export const NIGHT_LIFESTYLE_PREFERENCES_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
+  [
+    {
+      text: 'Люблю, хожу',
+      callback_data: JSON.stringify([
+        Entertainment.NIGHT_LIFESTYLE,
+      ]),
+    },
+    {
+      text: 'Не нравится',
+      callback_data: JSON.stringify([]),
+    },
+  ],
+];
+
+export const FOOD_HUNTER_PREFERENCES_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
+  [
+    {
+      text: 'Да',
+      callback_data: JSON.stringify([
+        Entertainment.RESTAURANT, Entertainment.CAFE,
+      ]),
+    },
+    {
+      text: 'Нет',
+      callback_data: JSON.stringify([]),
+    },
+  ],
+];
+
+export const OUTDOORS_PREFERENCES_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
+  [
+    {
+      text: 'Люблю',
+      callback_data: JSON.stringify([
+        Entertainment.OUTDOORS, Entertainment.WITH_PETS,
+      ]),
+    },
+    {
+      text: 'Не мое',
+      callback_data: JSON.stringify([]),
+    },
+  ],
+];
+
+export const CHILL_RELAX_PREFERENCES_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
+  [
+    {
+      text: 'Люблю',
+      callback_data: JSON.stringify([
+        Entertainment.OUTDOORS, Entertainment.WITH_PETS,
+      ]),
+    },
+    {
+      text: 'Не мое',
+      callback_data: JSON.stringify([]),
+    },
   ],
 ];

@@ -55,8 +55,6 @@ const collectFeedback: Middleware<any> = async (ctx) => {
   await ctx.deleteMessage();
 
   const eventFeedback = ctx.update?.callback_query?.data;
-  console.log('🚀 ~ eventFeedback:', eventFeedback);
-
   ctx.scene.session.feedback.is_liked = eventFeedback === EventFeedback.LIKE;
 
   const { message_id: msgId } = await ctx.reply(
@@ -121,7 +119,6 @@ const processEventFinishWithComment: Middleware<any> = async (ctx) => {
   await ctx.deleteMessage(ctx.scene.session.msgId);
 
   const eventComment = ctx.update.message.text;
-  console.log('🚀 ~ eventComment:', eventComment);
 
   const event = new Event();
   event.id = ctx.scene.state.eventId;

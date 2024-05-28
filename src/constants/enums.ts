@@ -27,6 +27,27 @@ export enum Entertainment {
   BRAINSTORM = 'Интеллектуальные развлечения',
   FOOD = 'Посещение кафе, ресторанов, баров',
   ART = 'Творческий отдых',
+  ACTIVITIES = '1', // Активный отдых
+  LONELY = '2', // Одиночные
+  FOR_COUPLES = '3', // Для влюбленных
+  WITH_FRIENDS = '4', // С друзьями
+  OUTDOORS = '5', // На природе
+  WITH_PETS = '6', // С животными
+  SELF_DEVELOPMENT = '7', // Саморазвитие
+  SPORT = '8', // Спорт
+  EXTREME = '9', // Экстрим
+  MASTER_CLASSES = '10', // Мастер-классы
+  FREE = '11', // Бесплатные
+  ENLIGHTENMENT = '12', // Просвещение
+  CONCERT_THEATRE_CINEMA = '13', // Концерты, театры и кино
+  CAFE = '14', // Кофейни и кондитерские
+  RESTAURANT = '15', // Рестораны
+  ENTERTAINMENT = '16', // Развлекательное
+  AQUATIC = '17', // Водные
+  RELAX = '18', // Релакс
+  NIGHT_LIFESTYLE = '20', // Ночная жизнь
+  TEAM = '21', // Командные
+  INDOORS = '22', // Не выходя из дома
 }
 
 export enum EventState {

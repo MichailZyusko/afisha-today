@@ -1,4 +1,13 @@
+import { InlineKeyboardButton } from 'telegraf/types';
 import { deepTrim } from '../utils';
+import {
+  ACTIVE_SPORTS_PREFERENCES_KEYBOARD_MARKUP, AGE_KEYBOARD_MARKUP,
+  CHILL_RELAX_PREFERENCES_KEYBOARD_MARKUP,
+  FOOD_HUNTER_PREFERENCES_KEYBOARD_MARKUP, FREE_TIME_PREFERENCES_KEYBOARD_MARKUP,
+  NIGHT_LIFESTYLE_PREFERENCES_KEYBOARD_MARKUP, OUTDOORS_PREFERENCES_KEYBOARD_MARKUP,
+  SELF_EDUCATION_PREFERENCES_KEYBOARD_MARKUP, SEX_KEYBOARD_MARKUP,
+} from './keyboard_markup';
+import { Entertainment } from './enums';
 
 export const DISAGREE_ON_PERSONAL_DATA_PROCESSING_MSG = 'Было приятно с тобой пообщаться, брат. Если передумаешь, напиши /start';
 
@@ -23,18 +32,53 @@ export const START_SCENE_REPLICAS = {
   1: 'Для того, чтобы мы познакомились поближе, нам нужно твое согласие на обработку персональных данных 😊',
 };
 
-export const INTRODUCTION_SCENE_REPLICAS = {
-  0: 'Твой пол',
-  1: 'Твой возраст',
-  2: 'Оцени варианты развлечений, чтобы мы поняли, какие задания предлагать тебе 👇',
-  3: `Отлично! Теперь мы знаем друг друга намного лучше!
-  
-Мы подберем для тебя 5 заданий на основе твоих предпочтений. Выбирай одно из них, с которого ты решил начать!`,
-};
+export const REGISTRATION_REPLIES = {
+  0: {
+    msg: 'Твой пол',
+    keyboard: SEX_KEYBOARD_MARKUP,
+  },
+  1: {
+    msg: 'Твой возраст',
+    keyboard: AGE_KEYBOARD_MARKUP,
+  },
+  2: {
+    msg: 'Как ты предпочитаешь проводить свободное время?',
+    keyboard: FREE_TIME_PREFERENCES_KEYBOARD_MARKUP,
+  },
+  3: {
+    msg: 'Как ты относишься к активному отдыху и спорту?',
+    keyboard: ACTIVE_SPORTS_PREFERENCES_KEYBOARD_MARKUP,
+  },
+  4: {
+    msg: 'Любишь ли ты учиться чему-то новому?',
+    keyboard: SELF_EDUCATION_PREFERENCES_KEYBOARD_MARKUP,
+  },
+  5: {
+    msg: 'Что насчет посещения баров и клубов?',
+    keyboard: NIGHT_LIFESTYLE_PREFERENCES_KEYBOARD_MARKUP,
+  },
+  6: {
+    msg: 'Любишь ли ты открывать для себя новые гастро-заведения?',
+    keyboard: FOOD_HUNTER_PREFERENCES_KEYBOARD_MARKUP,
+  },
+  7: {
+    msg: 'Что думаешь насчет отдыха на природе?',
+    keyboard: OUTDOORS_PREFERENCES_KEYBOARD_MARKUP,
+  },
+  8: {
+    msg: 'Любишь ли ты спокойный отдых/чилл?',
+    keyboard: CHILL_RELAX_PREFERENCES_KEYBOARD_MARKUP,
+  },
+} as Record<number, { msg: string, keyboard: InlineKeyboardButton[][] }>;
+
+export const DEFAULT_CATEGORIES = [
+  Entertainment.INDOORS, Entertainment.LONELY,
+  Entertainment.FREE, Entertainment.ENTERTAINMENT,
+].map(Number);
 
 export const DEFAULT_ERROR_MSG = deepTrim(`
   Кажется что-то пошло не так. Попробуйте еще раз позже!
   Спасибо за понимание 😉!
 `);
 
-export const REGISTRATION_EVENTS_COUNT = 4;
+export const REGISTRATION_EVENTS_COUNT = 6;
