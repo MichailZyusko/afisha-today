@@ -8,7 +8,7 @@ import db from './services/database';
       Commands.start(),
       Commands.agreeOnPersonalDataProcessing(),
       Commands.disagreeOnPersonalDataProcessing(),
-      Commands.getMyQRCode(),
+      // Commands.getMyQRCode(),
       Commands.suggestNewEvent(),
     ]);
 
@@ -19,7 +19,7 @@ import db from './services/database';
   } catch (e) {
     console.error(e);
   } finally {
-    // await db.close();
+    await db.close();
     process.exit(0);
   }
 })();

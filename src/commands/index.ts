@@ -37,7 +37,9 @@ export class Commands {
   static async start() {
     bot.start(async (ctx) => {
       try {
-        await ctx.reply(START_SCENE_REPLICAS[0]);
+        const { message_id: msgId } = await ctx.reply(START_SCENE_REPLICAS[0]);
+        await ctx.pinChatMessage(msgId);
+
         await ctx.reply(START_SCENE_REPLICAS[1], {
           parse_mode: 'HTML',
           link_preview_options: {

@@ -76,9 +76,8 @@ const getMoreDetails: Middleware<any> = async (ctx) => {
     const { caption, media } = new EventDTO(event);
 
     await ctx.deleteMessages([...ctx.scene.session.msgIds, ctx.scene.state.msgId].filter(Boolean));
-    ctx.scene.state.msgId = null;
 
-    await ctx.replyWithPhoto(
+    const { message_id: msgId } = await ctx.replyWithPhoto(
       { url: media },
       {
         caption,
@@ -88,6 +87,8 @@ const getMoreDetails: Middleware<any> = async (ctx) => {
         },
       },
     );
+
+    ctx.scene.state.msgId = msgId;
 
     return ctx.wizard.next();
   } catch (error) {
@@ -103,13 +104,14 @@ const selectEvent: Middleware<any> = async (ctx) => {
     console.log(`${Scenes.SUGGESTION_SCENE}~STEP: 3`);
     const action = ctx.update.callback_query.data;
 
-    await ctx.deleteMessage();
-
     if (action === EventAgreement.BACK) {
+      await ctx.deleteMessage();
       await ctx.scene.leave();
       await ctx.scene.enter(Scenes.SUGGESTION_SCENE);
       return undefined;
     }
+
+    await ctx.editMessageReplyMarkup(undefined);
 
     const eventId = ctx.scene.session.event.id;
     const userId = ctx.from.id;
@@ -155,6 +157,7 @@ const processEvent: Middleware<any> = async (ctx) => {
     const { userEventId } = ctx.scene.session;
 
     await ctx.deleteMessage();
+    await ctx.deleteMessage(ctx.scene.state.msgId);
     if (action === EventFinish.REJECT) {
       await db.usersEventsRepository.update(
         { id: userEventId },
