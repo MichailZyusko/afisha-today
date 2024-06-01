@@ -14,7 +14,10 @@ export class EventDTO {
 
   constructor(event: Event, opt: TConstructorOptions = { short: false }) {
     this.media = event.media;
-    const workingPeriod = formatDateRange(event.started_at, event.expired_at);
+    const workingPeriod = formatDateRange(
+      new Date(event.started_at),
+      new Date(event.expired_at),
+    );
 
     this.caption = opt.short
       ? deepTrim(`
