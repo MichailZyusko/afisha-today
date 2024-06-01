@@ -39,6 +39,10 @@ export class Commands {
       try {
         await ctx.reply(START_SCENE_REPLICAS[0]);
         await ctx.reply(START_SCENE_REPLICAS[1], {
+          parse_mode: 'HTML',
+          link_preview_options: {
+            is_disabled: true,
+          },
           reply_markup: {
             inline_keyboard: AGREEMENT_ON_PERSONAL_DATA_PROCESSING_KEYBOARD_MARKUP,
           },

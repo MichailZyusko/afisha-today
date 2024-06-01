@@ -9,6 +9,7 @@ import {
 import db from '../../services/database';
 import { Event } from '../../services/database/entities/event.entity';
 import { EventDTO } from '../../dto/event.dto';
+import { deepTrim } from '../../utils';
 
 const recommendEvent: Middleware<any> = async (ctx) => {
   try {
@@ -47,7 +48,7 @@ const recommendEvent: Middleware<any> = async (ctx) => {
       ...replyWithMediaGroupResponse.map((reply: any) => reply.message_id),
     ];
 
-    const { message_id: msgId } = await ctx.reply('Выбери то, что тебе больше окликаеться', {
+    const { message_id: msgId } = await ctx.reply('Что выберешь ты?', {
       reply_markup: {
         inline_keyboard: EVENT_ID_KEYBOARD_MARKUP,
       },
@@ -123,7 +124,12 @@ const selectEvent: Middleware<any> = async (ctx) => {
     ctx.scene.session.userEventId = id;
 
     await ctx.reply(
-      'Отличный вкус! Дай знать когда выполнишь задание. Спасибо!',
+      deepTrim(
+        `Отличный вкус! Дай знать когда выполнишь задание. Спасибо!
+          
+        Чтобы ты точно попал на эту активность, рекомендуем тебе заранее записаться на сайте или в Инстаграме компании 🫶
+      `,
+      ),
       {
         reply_markup: {
           inline_keyboard: EVENT_FINISH_KEYBOARD_MARKUP,

@@ -18,20 +18,26 @@ export class EventDTO {
 
     this.caption = opt.short
       ? deepTrim(`
-        Предлагаю посмотреть на <b>"${event.name}"</b> ${event.is_adult_only ? '🔞' : ''}
-        В двух словах это ${event.description}
+        <b>"${event.name}"</b> ${event.is_adult_only ? '🔞' : ''}
+        А если подробнее - ${event.description}
+
         💰: ${event.price}
         📍: <a href="${event.location}" >${event.address}</a>
         🕔: ${event.schedule}${workingPeriod === ALWAYS_AVAILABLE ? '' : `\n🗓: ${workingPeriod}`}
         🌐: <a href="${event.url}" >${event.name}</a>
+
+       <i>Режим работы и стоимость актуальна на 27 мая, подробности уточняйте при записи или покупке билета.</i>
   `)
       : deepTrim(`
-        Предлагаю посмотреть на <b>"${event.name}"</b> ${event.is_adult_only ? '🔞' : ''}
-        В двух словах это ${event.description}
+        <b>"${event.name}"</b> ${event.is_adult_only ? '🔞' : ''}
+        А если подробнее - ${event.description}
+
         💰: ${event.price}
         📍: <a href="${event.location}" >${event.address}</a>
         🕔: ${event.schedule}${workingPeriod === ALWAYS_AVAILABLE ? '' : `\n🗓: ${workingPeriod}`}
         🌐: <a href="${event.url}" >${event.name}</a>
+
+        <i>Режим работы и стоимость актуальна на 27 мая, подробности уточняйте при записи или покупке билета.</i>
   `);
   }
 }

@@ -12,7 +12,7 @@ const collectPhotoProof: Middleware<any> = async (ctx) => {
   console.log(`${Scenes.FEEDBACK_SCENE}~STEP: 1`);
 
   const { message_id: msgId } = await ctx.reply(
-    'Можешь оставить свой фото-подтверждение?',
+    'Можешь оставить свое фото-подтверждение?',
     {
       reply_markup: {
         force_reply: true,
@@ -45,7 +45,7 @@ const processEvent: Middleware<any> = async (ctx) => {
 
     await ctx.deleteMessage(ctx.scene.session.msgId);
     await ctx.reply(
-      'Как тебе нравится? Спасибо!',
+      'Как ты оцениваешь это задание? ',
       {
         reply_markup: {
           inline_keyboard: EVENT_FEEDBACK_KEYBOARD_MARKUP,
@@ -58,7 +58,7 @@ const processEvent: Middleware<any> = async (ctx) => {
     console.error(error);
 
     const { message_id: msgId } = await ctx.reply(
-      'Пожалуйста, пришли свой фото-подтверждение, а не просто текст',
+      'Пожалуйста, пришли свое фото-подтверждение, а не просто текст',
     );
     await ctx.deleteMessage(ctx.scene.session.msgId);
     await ctx.scene.leave();
@@ -79,7 +79,8 @@ const collectFeedback: Middleware<any> = async (ctx) => {
   ctx.scene.session.feedback.is_liked = eventFeedback === EventFeedback.LIKE;
 
   const { message_id: msgId } = await ctx.reply(
-    'Спасибо за твой отзыв! Если вдруг у тебя есть чем поделиться, то оставь это ниже или начни сначала',
+    `Спасибо за твой отзыв! 
+Будем рады услышать твой развернутый отзыв или дать тебе новое задание 😉`,
     {
       reply_markup: {
         inline_keyboard: EVENT_FEEDBACK_FINISH_KEYBOARD_MARKUP,

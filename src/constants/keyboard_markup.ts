@@ -96,6 +96,8 @@ export const FREE_TIME_PREFERENCES_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
       text: 'Один',
       callback_data: JSON.stringify([]),
     },
+  ],
+  [
     {
       text: 'В компании друзей (второй половинки)',
       callback_data: JSON.stringify([
@@ -109,7 +111,7 @@ export const FREE_TIME_PREFERENCES_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
 export const ACTIVE_SPORTS_PREFERENCES_KEYBOARD_MARKUP: InlineKeyboardButton[][] = [
   [
     {
-      text: 'Класс, нравиться',
+      text: 'Класс, нравится',
       callback_data: JSON.stringify([
         Entertainment.ACTIVITIES, Entertainment.SPORT,
         Entertainment.EXTREME,
