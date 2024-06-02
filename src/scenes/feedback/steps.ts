@@ -1,4 +1,6 @@
 import { Middleware } from 'telegraf';
+import axios from 'axios';
+import { writeFile, access, mkdir } from 'fs/promises';
 import { EventFeedback, EventFeedbackFinish, Scenes } from '../../constants/enums';
 import {
   EVENT_FEEDBACK_FINISH_KEYBOARD_MARKUP,
@@ -7,6 +9,31 @@ import {
 import db from '../../services/database';
 import { User } from '../../services/database/entities/user.entity';
 import { Event } from '../../services/database/entities/event.entity';
+import { PATH_TO_PHOTO_PROOFS } from '../../config';
+
+type TDownloadPhoto = {
+  url: string;
+  userId: number;
+  eventId: string
+};
+const downloadPhoto = async ({ url, userId, eventId }: TDownloadPhoto) => {
+  try {
+    const { data: imageStream } = await axios({ url, responseType: 'stream' });
+
+    const dirPath = `${PATH_TO_PHOTO_PROOFS}/${userId}`;
+    const photoPath = `${dirPath}/${eventId}.png`;
+
+    try {
+      await access(dirPath);
+    } catch (e) {
+      await mkdir(dirPath);
+    }
+
+    await writeFile(photoPath, imageStream, 'binary');
+  } catch (error) {
+    console.error('Unable to download photo proof:', error);
+  }
+};
 
 const collectPhotoProof: Middleware<any> = async (ctx) => {
   console.log(`${Scenes.FEEDBACK_SCENE}~STEP: 1`);
@@ -41,7 +68,11 @@ const processEvent: Middleware<any> = async (ctx) => {
     const fileId = photo?.file_id;
     const photoLink = await ctx.telegram.getFileLink(fileId);
 
-    ctx.scene.session.feedback.photo_proof = photoLink;
+    await downloadPhoto({
+      url: photoLink,
+      userId: ctx.from.id,
+      eventId: ctx.scene.state.eventId,
+    });
 
     await ctx.deleteMessage(ctx.scene.session.msgId);
     await ctx.reply(
