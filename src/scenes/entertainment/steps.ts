@@ -121,6 +121,8 @@ const selectEvent: Middleware<any> = async (ctx) => {
     const eventId = ctx.scene.session.event.id;
     const userId = ctx.from.id;
 
+    cachedEvents.delete(+userId);
+
     const { id } = await db.usersEventsRepository.save({
       user_id: userId,
       event_id: eventId,
@@ -184,9 +186,6 @@ const processEvent: Middleware<any> = async (ctx) => {
         state: EventState.COMPLETED,
       },
     );
-
-    const userId = +ctx.from.id;
-    cachedEvents.delete(userId);
 
     await ctx.scene.leave();
     await ctx.scene.enter(Scenes.FEEDBACK_SCENE, { eventId });
