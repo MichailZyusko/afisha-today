@@ -31,7 +31,6 @@
     "@types/qrcode": "^1.5.5",
     "@typescript-eslint/eslint-plugin": "^7.4.0",
     "@typescript-eslint/parser": "^7.4.0",
-    "axios": "^1.7.2",
     "eslint": "^8.57.0",
     "eslint-config-airbnb-typescript": "^18.0.0",
     "eslint-plugin-import": "^2.29.1",
@@ -44,6 +43,7 @@
   "dependencies": {
     "@telegraf/session": "^2.0.0-beta.7",
     "@types/lodash.chunk": "^4.2.9",
+    "axios": "^1.7.2",
     "dotenv": "^16.4.5",
     "lodash.chunk": "^4.2.0",
     "pg": "^8.11.3",
