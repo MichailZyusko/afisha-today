@@ -11,6 +11,8 @@ import { Event } from '../../services/database/entities/event.entity';
 import { EventDTO } from '../../dto/event.dto';
 import { deepTrim } from '../../utils';
 
+const cachedEvents = new Map<number, Event[]>();
+
 const recommendEvent: Middleware<any> = async (ctx) => {
   try {
     console.log(`${Scenes.SUGGESTION_SCENE}~STEP: 1`);
@@ -24,11 +26,14 @@ const recommendEvent: Middleware<any> = async (ctx) => {
       return ctx.scene.leave();
     }
 
-    const events = await db.query<Event[]>(
-      'SELECT * FROM suggest_events_for_user($1)',
-      [userId],
-    );
+    const events = cachedEvents.has(userId)
+      ? cachedEvents.get(userId) || []
+      : await db.query<Event[]>(
+        'SELECT * FROM suggest_events_for_user($1)',
+        [userId],
+      );
 
+    cachedEvents.set(userId, events);
     ctx.scene.session.events = events;
 
     if (!events.length) {
@@ -179,6 +184,9 @@ const processEvent: Middleware<any> = async (ctx) => {
         state: EventState.COMPLETED,
       },
     );
+
+    const userId = +ctx.from.id;
+    cachedEvents.delete(userId);
 
     await ctx.scene.leave();
     await ctx.scene.enter(Scenes.FEEDBACK_SCENE, { eventId });

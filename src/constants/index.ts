@@ -42,38 +42,38 @@ export const REGISTRATION_REPLIES = {
     keyboard: AGE_KEYBOARD_MARKUP,
   },
   2: {
-    msg: 'Как ты предпочитаешь проводить свободное время?',
-    keyboard: FREE_TIME_PREFERENCES_KEYBOARD_MARKUP,
-  },
-  3: {
     msg: 'Как ты относишься к активному отдыху и спорту?',
     keyboard: ACTIVE_SPORTS_PREFERENCES_KEYBOARD_MARKUP,
   },
-  4: {
+  3: {
     msg: 'Любишь ли ты учиться чему-то новому?',
     keyboard: SELF_EDUCATION_PREFERENCES_KEYBOARD_MARKUP,
   },
-  5: {
+  4: {
     msg: 'Что насчет посещения баров и клубов?',
     keyboard: NIGHT_LIFESTYLE_PREFERENCES_KEYBOARD_MARKUP,
   },
-  6: {
+  5: {
     msg: 'Любишь ли ты открывать для себя новые гастро-заведения?',
     keyboard: FOOD_HUNTER_PREFERENCES_KEYBOARD_MARKUP,
   },
-  7: {
+  6: {
     msg: 'Что думаешь насчет отдыха на природе?',
     keyboard: OUTDOORS_PREFERENCES_KEYBOARD_MARKUP,
   },
-  8: {
+  7: {
     msg: 'Любишь ли ты спокойный отдых/чилл?',
     keyboard: CHILL_RELAX_PREFERENCES_KEYBOARD_MARKUP,
   },
+  // 8: {
+  //   msg: 'Как ты предпочитаешь проводить свободное время?',
+  //   keyboard: FREE_TIME_PREFERENCES_KEYBOARD_MARKUP,
+  // },
 } as Record<number, { msg: string, keyboard: InlineKeyboardButton[][] }>;
 
 export const DEFAULT_CATEGORIES = [
-  Entertainment.INDOORS, Entertainment.LONELY,
-  Entertainment.FREE, Entertainment.ENTERTAINMENT,
+  Entertainment.INDOORS, Entertainment.FREE,
+  Entertainment.ENTERTAINMENT,
 ].map(Number);
 
 export const DEFAULT_ERROR_MSG = deepTrim(`
@@ -81,4 +81,4 @@ export const DEFAULT_ERROR_MSG = deepTrim(`
   Спасибо за понимание 😉!
 `);
 
-export const REGISTRATION_EVENTS_COUNT = 6;
+export const REGISTRATION_EVENTS_COUNT = 5;

@@ -36,3 +36,4 @@ lerna-debug.log*
 # Assets
 src/assets/photo-proof/*
 src/assets/qrcode/*
+!src/assets/photo-proof/.empty

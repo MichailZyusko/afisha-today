@@ -21,7 +21,7 @@ const downloadPhoto = async ({ url, userId, eventId }: TDownloadPhoto) => {
     const { data: imageStream } = await axios({ url, responseType: 'stream' });
 
     const dirPath = `${PATH_TO_PHOTO_PROOFS}/${userId}`;
-    const photoPath = `${dirPath}/${eventId}.png`;
+    const photoPath = `${dirPath}/${eventId}_${Date.now()}.png`;
 
     try {
       await access(dirPath);

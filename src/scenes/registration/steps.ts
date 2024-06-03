@@ -1,7 +1,8 @@
 import { Middleware } from 'telegraf';
 import {
-  DEFAULT_CATEGORIES, REGISTRATION_EVENTS_COUNT, REGISTRATION_REPLIES,
+  DEFAULT_CATEGORIES, REGISTRATION_EVENTS_COUNT,
 } from '../../constants';
+import { REGISTRATION_REPLIES } from '../../constants/REGISTRATION_REPLIES';
 import { Scenes, Sex } from '../../constants/enums';
 import { deepTrim } from '../../utils';
 import { UserDTO } from '../../dto/user.dto';

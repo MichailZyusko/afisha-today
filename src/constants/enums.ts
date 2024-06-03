@@ -45,9 +45,9 @@ export enum Entertainment {
   ENTERTAINMENT = '16', // Развлекательное
   AQUATIC = '17', // Водные
   RELAX = '18', // Релакс
-  NIGHT_LIFESTYLE = '20', // Ночная жизнь
-  TEAM = '21', // Командные
-  INDOORS = '22', // Не выходя из дома
+  NIGHT_LIFESTYLE = '19', // Ночная жизнь
+  TEAM = '20', // Командные
+  INDOORS = '21', // Не выходя из дома
 }
 
 export enum EventState {
