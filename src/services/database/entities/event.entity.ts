@@ -49,7 +49,7 @@ export class Event {
   })
   is_adult_only: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   url: string;
 
   @Column('int4', {
