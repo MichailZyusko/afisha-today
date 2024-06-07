@@ -11,7 +11,7 @@ import { Age, Busyness } from '../../../constants/enums';
 
 @Entity('users')
 export class User {
-  @PrimaryColumn()
+  @PrimaryColumn({ type: 'bigint' })
   id: number;
 
   @Column()
